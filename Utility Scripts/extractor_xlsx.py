@@ -2,6 +2,7 @@ import requests
 import openpyxl as opx
 
 def main():
+    '''Download product info from source and save it into an xlsx file'''
 
     source = "https://www.ab.gr/click2shop/c/_INDEX_/loadMore?q=%3Apopularity&sort=popularity&pageSize=300&pageNumber=0"
     wb = opx.Workbook()
