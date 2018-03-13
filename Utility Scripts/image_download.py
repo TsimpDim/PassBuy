@@ -1,10 +1,14 @@
 import urllib.request
 import requests
+import os
 
 def main():
     '''Download all product images from every category into an 'images' folder'''
     
     source = "https://www.ab.gr/click2shop/c/_INDEX_/loadMore?q=%3Apopularity&sort=popularity&pageSize=300&pageNumber=0"
+
+    if not os.path.exists('images'):
+        os.makedirs('images')
 
     for i in range(1, 14):
         
