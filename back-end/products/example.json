@@ -1,0 +1,41 @@
+[
+  {
+    "category_id": 9,
+    "product_id": 9105,
+    "product_name": "ΧΑΡΤΙ ΥΓΕΙΑΣ ΣΟΦΤ 3 ΦΥΛΛΑ 12 ΤΕΜ",
+    "product_description": "Χαρτί υγείας Soft 3 φύλλων. Εξαιρετικά απαλό και απορροφητικό.",
+    "product_img_url": "https://www.ab.gr/medias/sys_master/h43/hca/8833417379870.jpg",
+    "supermarket_prices": [
+      {
+        "supermarket_id": 1001,
+        "product_price": "3,88"
+      }
+    ]
+  },
+  {
+    "category_id": 9,
+    "product_id": 9106,
+    "product_name": "ΧΑΡΤΟΠΕΤΣΕΤΕΣ ΛΕΥΚΕΣ 30 Χ 30 CM 100 ΤΕΜ",
+    "product_description": "Αφράτες και απαλές λευκές χαρτοπετσέτες.",
+    "product_img_url": "https://www.ab.gr/medias/sys_master/ha8/h5e/8829099311134.jpg",
+    "supermarket_prices": [
+      {
+        "supermarket_id": 1001,
+        "product_price": "0,57"
+      }
+    ]
+  },
+  {
+    "category_id": 9,
+    "product_id": 9107,
+    "product_name": "ΧΑΡΤΟΜΑΝΤΗΛΑ FACIAL 3 ΦΥΛΛΑ 90 ΤΕΜ",
+    "product_description": "90 λευκά χαρτομάντιλα.",
+    "product_img_url": "https://www.ab.gr/medias/sys_master/hd0/hb6/8833047429150.jpg",
+    "supermarket_prices": [
+      {
+        "supermarket_id": 1001,
+        "product_price": "1,16"
+      }
+    ]
+  }
+]
