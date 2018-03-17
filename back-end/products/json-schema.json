@@ -30,7 +30,7 @@
         "type": "array",
         "items": {
           "supermarket_id": {
-            "description": "Uniqe identifier of a supermarket",
+            "description": "Unique identifier of a supermarket",
             "type": "integer"
           },
           "product_price": {
