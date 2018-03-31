@@ -25,8 +25,6 @@ CREATE TABLE `categories` (
 	PRIMARY KEY (`category_id`)
 );
 
-ALTER TABLE `store_names` ADD CONSTRAINT `store_names_fk0` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`);
-
 ALTER TABLE `products` ADD CONSTRAINT `products_fk0` FOREIGN KEY (`category`) REFERENCES `categories`(`category_id`);
 
 ALTER TABLE `product_prices` ADD CONSTRAINT `product_prices_fk0` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`);
