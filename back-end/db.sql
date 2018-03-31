@@ -1,12 +1,7 @@
-CREATE TABLE `store_names` (
-	`alternative_name` varchar NOT NULL,
-	`store_id` INT NOT NULL
-);
-
 CREATE TABLE `products` (
 	`name` varchar NOT NULL,
-	`description` TEXT NOT NULL,
-	`image_link` varchar NOT NULL,
+	`description` TEXT,
+	`image_url` varchar,
 	`category` INT NOT NULL,
 	`product_id` INT NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`product_id`)
@@ -19,7 +14,7 @@ CREATE TABLE `product_prices` (
 );
 
 CREATE TABLE `stores` (
-	`main_name` varchar NOT NULL,
+	`name` varchar NOT NULL,
 	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
 	PRIMARY KEY (`id`)
 );
