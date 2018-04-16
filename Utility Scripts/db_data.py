@@ -6,11 +6,12 @@ import html
 def main():
     '''Save product data from specific categories into a csv'''
     
-    index = sys.argv[1]
-    db_index = sys.argv[2]
-    if not index or not db_index:
+    if len(sys.argv) < 3 or len(sys.argv) > 2:
         print("Usage : db_data.py <source_index> <db_index>")
         sys.exit()    
+
+    index = sys.argv[1]
+    db_index = sys.argv[2]
 
     source = "https://www.ab.gr/click2shop/c/_INDEX_/loadMore?q=%3Apopularity&sort=popularity&pageSize=300&pageNumber=0"
 
