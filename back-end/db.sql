@@ -1,7 +1,7 @@
 CREATE TABLE `products` (
-	`name` varchar NOT NULL,
+	`name` varchar(150) NOT NULL,
 	`description` TEXT,
-	`image_url` varchar,
+	`image_url` varchar(300),
 	`category` INT NOT NULL,
 	`product_id` INT NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`product_id`)
@@ -14,13 +14,13 @@ CREATE TABLE `product_prices` (
 );
 
 CREATE TABLE `stores` (
-	`name` varchar NOT NULL,
+	`name` varchar(100) NOT NULL,
 	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `categories` (
-	`name` varchar NOT NULL,
+	`name` varchar(100) NOT NULL,
 	`category_id` INT NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`category_id`)
 );
