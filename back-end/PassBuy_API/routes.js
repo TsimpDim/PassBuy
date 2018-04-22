@@ -11,4 +11,11 @@ router.get('/stores', function(req, res) {
     });
 });
 
-module.exports = router;
+router.get('/categories', function(req, res) {
+    db.query("SELECT * FROM categories", function(err, result, fields){
+        if(err) throw err;
+
+        res.send(result);
+    });
+
+});module.exports = router;
