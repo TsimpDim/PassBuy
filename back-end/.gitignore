@@ -1,2 +1,3 @@
 PassBuy_API/node_modules
 PassBuy_API/.jshintrc
+PassBuy_API/db_creds.json
