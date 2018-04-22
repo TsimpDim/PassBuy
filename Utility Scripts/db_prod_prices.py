@@ -34,7 +34,7 @@ def main():
             for product in json_data:
                 base_price = Decimal(product["price"]["value"])
 
-                for store_id in range(1, 7): # [1,6]
+                for store_id in range(1, 5): # [1,4] since we have 4 stores
                     variance = Decimal(rnd.uniform(-0.5, 0.5))
                     store_price = base_price + base_price * variance
 
