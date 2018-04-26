@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let db = require('./db');
+let db = require('./db_connection');
 
 
 router.get('/stores', function(req, res) {
@@ -19,6 +19,7 @@ router.get('/categories', function(req, res) {
     });
 
 });
+
 router.get('/categories/:id', function(req, res) {
     db.query("SELECT * FROM categories WHERE category_id = ?",[req.params.id],
     function(err, result, fields){
