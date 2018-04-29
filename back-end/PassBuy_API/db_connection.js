@@ -7,11 +7,11 @@ let db;
 function connectDatabase(){
     if(!db){
         db = mysql.createConnection(db_creds);
-        
+
         db.connect(function(err){ // Connect to DB
             if(err) throw err;
-            
-            console.log("Connected to DB successfully");
+
+            console.log("Database connection successful.");
         });
     }
 
