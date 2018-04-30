@@ -30,7 +30,7 @@ router.get('/categories/:id', function(req, res) {
 
 router.get('/products/:arg', function(req, res) {
 
-    // Arguement is number - thus an id
+    // Argument is number - thus an id
     if(!isNaN(req.params.arg)){
 
         db.query("SELECT * FROM products WHERE product_id = ?",[req.params.arg], // Get product info
@@ -55,7 +55,7 @@ router.get('/products/:arg', function(req, res) {
         
         });
 
-    // Arguement is a string - thus a category
+    // Argument is a string - thus a category
     }else{
         let response = {"category" : -1};
 
