@@ -28,29 +28,48 @@ router.get('/categories/:id', function(req, res) {
     });
 });
 
-router.get('/products/:id', function(req, res) {
+router.get('/products/:arg', function(req, res) {
 
-    db.query("SELECT * FROM products WHERE product_id = ?",[req.params.id], // Get product info
-    function(err, result, fields){
+    // Argument is number - thus an id
+    if(!isNaN(req.params.arg)){
 
-        if(err) throw err;
-
-        let response = result[0];
-
-        // When the previous query ends, start a new one for the prices
-        db.query("SELECT store_id, price FROM product_prices WHERE product_id = ?",[req.params.id], // Get price info
+        db.query("SELECT * FROM products WHERE product_id = ?",[req.params.arg], // Get product info
         function(err, result, fields){
-            if(err){
-                console.log(err);
-                response.prices = {"error" : "No prices found"};
-            }else{
-                response.prices = result;
-            }
 
-            res.send(response); // And when the new one finishes as well, send the response
+            if(err) throw err;
+
+            let response = result[0];
+
+            // When the previous query ends, start a new one for the prices
+            db.query("SELECT store_id, price FROM product_prices WHERE product_id = ?",[req.params.arg], // Get price info
+            function(err, result, fields){
+                if(err){
+                    console.log(err);
+                    response.prices = {"error" : "No prices found"};
+                }else{
+                    response.prices = result;
+                }
+
+                res.send(response); // And when the new one finishes as well, send the response
+            });
+        
         });
-    
-    });
+
+    // Argument is a string - thus a category
+    }else{
+        let response = {"category" : -1};
+
+        db.query("SELECT name, description, image_url, product_id, category FROM ??",[req.params.arg],
+        function(err, result, fields){
+            if(err) throw err;
+
+            response.category = result[0].category; // Get category from the first product
+            result.forEach(function(v){ delete v.category }); // Since every product is guaranteed to be from the same category
+            response.products = result;
+            
+            res.send(response);
+        });
+    }
 });
 
 router.get('/prices/:pr_id', function(req, res) {
@@ -81,5 +100,7 @@ router.get('/prices/:pr_id/:str_id', function(req, res) {
         res.send(result); 
     });
 });
+
+
 
 module.exports = router;
