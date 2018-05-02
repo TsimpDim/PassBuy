@@ -1,73 +1,93 @@
 let express = require('express');
 let router = express.Router();
 let db = require('./db_connection');
+let error_handling = require('./error_handling')
 
 
 router.get('/stores', function(req, res) {
     db.query("SELECT * FROM stores", function(err, result, fields){
-        if(err) throw err;
-
-        res.send(result);
+        // Handle errors if any
+        if(err){
+          res.send(error_handling("Could not retrieve stores"));
+        } else{
+          // Send the results if no errors encountered
+          res.send(result);
+        }
     });
 });
 
 router.get('/categories', function(req, res) {
     db.query("SELECT * FROM categories", function(err, result, fields){
-        if(err) throw err;
-
-        res.send(result);
+        // Handle errors if any
+        if (err) {
+          res.send(error_handling("Could not retrieve categories"));
+        } else {
+          // Send the results if no errors encountered
+          res.send(result);
+        }
     });
 });
 
 router.get('/categories/:id', function(req, res) {
-    db.query("SELECT * FROM categories WHERE category_id = ?",[req.params.id],
-    function(err, result, fields){
-        if(err) throw err;
-
-        res.send(result);
-    });
+    db.query("SELECT * FROM categories WHERE category_id = ?",[req.params.id], function(err, result, fields){
+        // Handle errors if any
+        if (err || result.length == 0) {
+          res.send(error_handling("Category not found"));
+        } else {
+          // Send the results if no errors encountered
+          res.send(result);
+        }
+   });
 });
 
 router.get('/products/:arg', function(req, res) {
 
-    // Argument is number - thus an id
+    // Argument is a number - thus an id
     if(!isNaN(req.params.arg)){
 
-        db.query("SELECT * FROM products WHERE product_id = ?",[req.params.arg], // Get product info
-        function(err, result, fields){
-
-            if(err) throw err;
+      // Get product info
+      db.query("SELECT * FROM products WHERE product_id = ?",[req.params.arg], function(err, result, fields){
+          // Handle errors if any
+          if (err || result.length == 0) {
+            res.send(error_handling("Product not found"));
+          } else {
 
             let response = result[0];
 
             // When the previous query ends, start a new one for the prices
-            db.query("SELECT store_id, price FROM product_prices WHERE product_id = ?",[req.params.arg], // Get price info
-            function(err, result, fields){
-                if(err){
-                    console.log(err);
-                    response.prices = {"error" : "No prices found"};
-                }else{
+            // Get product price
+            db.query("SELECT store_id, price FROM product_prices WHERE product_id = ?",[req.params.arg], function(err, result, fields){
+              // Handle errors if any
+                if(err) {
+                  response.prices = error_handling("No prices found");
+                } else {
                     response.prices = result;
                 }
-
-                res.send(response); // And when the new one finishes as well, send the response
+                // When the new query finishes as well, send the response
+                res.send(response);
             });
-        
+          }
         });
 
+
     // Argument is a string - thus a category
-    }else{
+    } else {
         let response = {"category" : -1};
 
-        db.query("SELECT name, description, image_url, product_id, category FROM ??",[req.params.arg],
-        function(err, result, fields){
-            if(err) throw err;
-
-            response.category = result[0].category; // Get category from the first product
-            result.forEach(function(v){ delete v.category }); // Since every product is guaranteed to be from the same category
+        db.query("SELECT name, description, image_url, product_id, category FROM ??",[req.params.arg], function(err, result, fields){
+          // Handle errors if any
+          if (err) {
+            res.send(error_handling("Could not retrieve products from the given category"));
+          } else {
+            // Get category from the first product
+            response.category = result[0].category;
+            // Since every product is guaranteed to be from the same category
+            result.forEach(function(v){ delete v.category });
             response.products = result;
-            
+
+            // Send the results if no errors encountered
             res.send(response);
+          }
         });
     }
 });
@@ -75,29 +95,40 @@ router.get('/products/:arg', function(req, res) {
 router.get('/prices/:pr_id', function(req, res) {
     db.query("SELECT * FROM product_prices WHERE product_id = ?",[req.params.pr_id],
     function(err, result, fields){
-        if(err) throw err;
-        
+      // Handle errors if any
+      if (err || result.length == 0) {
+        res.send(error_handling("Could not find prices for the given product"));
+      } else {
         // Set up response object
-        let response = {"product_id" : req.params.pr_id}; // Default value is the product_id itself
-        response.prices = []; // Add prices array
+        // Default value is the product_id itself
+        // Type cast to integer avoiding letters being added on the final JSON object
+        let response = {"product_id" : parseInt(req.params.pr_id)};
 
-        result.forEach(el => {
+        // Add 'prices' array
+        response.prices = [];
+
+        // Add product prices to 'prices' array
+        result.forEach(element => {
             response.prices.push({
-                "store_id" : el.store_id,
-                "price" : el.price
+                "store_id" : element.store_id,
+                "price" : element.price
             });
         });
-
+        // Send the results if no errors encountered
         res.send(response);
+      }
     });
 });
 
 router.get('/prices/:pr_id/:str_id', function(req, res) {
-    db.query("SELECT * FROM product_prices WHERE product_id = ? AND store_id = ?",[req.params.pr_id, req.params.str_id],
-    function(err, result, fields){
-        if(err) throw err;
-
-        res.send(result); 
+    db.query("SELECT * FROM product_prices WHERE product_id = ? AND store_id = ?",[req.params.pr_id, req.params.str_id], function(err, result, fields){
+      // Handle errors if any
+      if (err || result == 0) {
+        res.send(error_handling("Could not retrieve prices for the given product or store"));
+      } else {
+        // Send the results if no errors encountered
+        res.send(result);
+      }
     });
 });
 
