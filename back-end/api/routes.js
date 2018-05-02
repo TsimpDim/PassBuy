@@ -4,7 +4,7 @@ let db = require('./db_connection');
 let error_handling = require('./error_handling')
 
 
-router.get('/stores', function(req, res) {
+router.get('/api/stores', function(req, res) {
     db.query("SELECT * FROM stores", function(err, result, fields){
         // Handle errors if any
         if(err){
@@ -16,7 +16,7 @@ router.get('/stores', function(req, res) {
     });
 });
 
-router.get('/categories', function(req, res) {
+router.get('/api/categories', function(req, res) {
     db.query("SELECT * FROM categories", function(err, result, fields){
         // Handle errors if any
         if (err) {
@@ -28,7 +28,7 @@ router.get('/categories', function(req, res) {
     });
 });
 
-router.get('/categories/:id', function(req, res) {
+router.get('/api/categories/:id', function(req, res) {
     db.query("SELECT * FROM categories WHERE category_id = ?",[req.params.id], function(err, result, fields){
         // Handle errors if any
         if (err || result.length == 0) {
@@ -40,7 +40,7 @@ router.get('/categories/:id', function(req, res) {
    });
 });
 
-router.get('/products/:arg', function(req, res) {
+router.get('/api/products/:arg', function(req, res) {
 
     // Argument is a number - thus an id
     if(!isNaN(req.params.arg)){
@@ -92,7 +92,7 @@ router.get('/products/:arg', function(req, res) {
     }
 });
 
-router.get('/prices/:pr_id', function(req, res) {
+router.get('/api/prices/:pr_id', function(req, res) {
     db.query("SELECT * FROM product_prices WHERE product_id = ?",[req.params.pr_id],
     function(err, result, fields){
       // Handle errors if any
@@ -120,7 +120,7 @@ router.get('/prices/:pr_id', function(req, res) {
     });
 });
 
-router.get('/prices/:pr_id/:str_id', function(req, res) {
+router.get('/api/prices/:pr_id/:str_id', function(req, res) {
     db.query("SELECT * FROM product_prices WHERE product_id = ? AND store_id = ?",[req.params.pr_id, req.params.str_id], function(err, result, fields){
       // Handle errors if any
       if (err || result == 0) {
