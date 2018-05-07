@@ -67,13 +67,14 @@ router.get('/api/products/:arg', function(req, res) {
                 if(err) {
                   response.prices = error_handling("No prices found");
                 } else {
-                    response.prices = result;
+                  response.prices = result;
                 }
                 // When the new query finishes as well, send the response
                 res.send(response);
             });
           }
         });
+        
     // Argument is a string - thus a category or a search keyword
     } else {
         let response = {"category" : -1};
@@ -81,18 +82,9 @@ router.get('/api/products/:arg', function(req, res) {
         db.query("SELECT name, description, image_url, product_id, category FROM ??",[req.params.arg],
         function(err, result, fields){
           
-          // If there is an error assume 'arg' is a search keyword
+          // Handle errors if any
           if (err) {
-            db.query("SELECT * FROM products WHERE name LIKE ?",['%' + req.params.arg + '%'], 
-            function(err, result, fields){
-
-              if(err || result.length == 0){
-                res.send(error_handling("No such category or product found with the given keyword"));
-              } else {
-                res.send(result);
-              }
-
-            });
+            res.send(error_handling("Could not retrieve products from the given category"));
           } else {
 
             // Get category from the first product
@@ -107,6 +99,20 @@ router.get('/api/products/:arg', function(req, res) {
           }
         });
     }
+});
+
+router.get('/api/products/search/:search_str', function(req, res){
+
+  db.query("SELECT * FROM products WHERE name LIKE ?",['%' + req.params.search_str + '%'], 
+  function(err, result, fields){
+
+    if(err || result.length == 0){
+      res.send(error_handling("No such product was found with the given keyword(s)"));
+    } else {
+      res.send(result);
+    }
+
+  });
 });
 
 router.get('/api/prices/:pr_id', function(req, res) {
