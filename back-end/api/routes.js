@@ -35,7 +35,7 @@ router.get('/api/categories/:id', function(req, res) {
           res.send(error_handling("Category not found"));
         } else {
           // Send the results if no errors encountered
-          res.send(result);
+          res.send(result[0]);
         }
    });
 });
@@ -127,7 +127,7 @@ router.get('/api/prices/:pr_id/:str_id', function(req, res) {
         res.send(error_handling("Could not retrieve prices for the given product or store"));
       } else {
         // Send the results if no errors encountered
-        res.send(result);
+        res.send(result[0]);
       }
     });
 });
