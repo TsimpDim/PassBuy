@@ -1,8 +1,8 @@
 # Back-end Development
 
-This sub-repository contains code regarding the back-end, including the database and the API.
+Αυτό το sub-repository περιέχει κώδικα για το back-end, δηλαδή την βάση δεδομένων και το API.
 
-## NodeJS
+## [NodeJS](https://nodejs.org/en/)
 
 **Για την εγκατάσταση των απαραίτητων modules:**
     
@@ -11,6 +11,23 @@ This sub-repository contains code regarding the back-end, including the database
 **Για την εκκίνηση του server:**
     
     node server.js
+    
+**Για τη σύνδεση με τη (τοπική) βάση:**
+
+Χρειάζεται ένα αρχείο [JSON](https://www.json.org) με τα στοιχεία της βάσης στο φάκελο `\api`, δηλαδή :  
+
+```
+{
+    "host":"xx",
+    "user":"yy",
+    "password":"zz",
+    "database":"ww"
+}
+```  
+
+**Αν υπάρχει πρόβλημα σύνδεσης:**  
+
+Βεβαιωθείτε ότι τρέχει το service της MySql τρέχοντας το `services.msc` και βρίσκοντας το αντίστοιχο service. Αν δεν τρέχει κάντε το εκκίνηση χειροκίνητα (δεξί κλίκ -> εκκίνηση)
 
 ## Χρήση του API:
 
@@ -166,12 +183,10 @@ This sub-repository contains code regarding the back-end, including the database
 Απάντηση :   
 
 ```
-[
-   {
-      "name":"Γαλακτοκομικά",
-      "category_id":2
-   }
-]
+{
+   "name":"Γαλακτοκομικά",
+   "category_id":2
+}
 ```
 
 • `/prices/<int:product_id>`
@@ -220,13 +235,11 @@ This sub-repository contains code regarding the back-end, including the database
 Απάντηση :   
 
 ```
-[
-   {
-      "store_id":2,
-      "price":2.8,
-      "product_id":2321
-   }
-]
+{
+   "store_id":2,
+   "price":2.8,
+   "product_id":2321
+}
 ```
 
 • `/stores`
@@ -259,3 +272,17 @@ This sub-repository contains code regarding the back-end, including the database
    }
 ]
 ```
+
+
+### Σε περίπτωση σφάλματος  
+
+Επιστρέφεται JSON τύπου : 
+
+```
+{
+   "status":"error",
+   "err_msg":"Could not retrieve products from the given category"
+}
+```
+
+με μήνυμα (`err_msg`) προσαρμοσμένο για κάθε endpoint.
