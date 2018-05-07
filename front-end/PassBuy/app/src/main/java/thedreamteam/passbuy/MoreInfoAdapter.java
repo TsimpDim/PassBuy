@@ -31,7 +31,7 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
         public TextView area;
         public TextView total;
 
-        // Speeds up rendering by reducing findViewById calls
+        //TODO: Speed up rendering by reducing findViewById calls
 
         public ViewHolder(View itemView) {
             super(itemView);
