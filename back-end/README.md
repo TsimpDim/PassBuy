@@ -4,11 +4,11 @@ This sub-repository contains code regarding the back-end, including the database
 
 ## NodeJS
 
-** Για την εγκατάσταση των απαραίτητων modules:  **
+**Για την εγκατάσταση των απαραίτητων modules:**
     
     npm install
 
-** Για την εκκίνηση του server:  **
+**Για την εκκίνηση του server:**
     
     node server.js
 
