@@ -24,10 +24,12 @@
         android:id="@+id/total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="36dp"
         android:scaleType="fitXY"
         android:text="4,65€"
         android:textSize="43sp"
+        app:layout_constraintBottom_toTopOf="@+id/mapsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,44 +49,44 @@
 
     <Button
         android:id="@+id/infoButton"
-        android:background="@drawable/curved_button"
         android:layout_width="86dp"
         android:layout_height="51dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="68dp"
+        android:background="@drawable/curved_button"
         android:scaleType="fitXY"
         android:text="ΠΛΗΡΟΦΟΡΙΕΣ ΚΑΛΑΘΙΟΥ"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/space"
         app:layout_constraintEnd_toStartOf="@+id/mapsButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/mapsButton"
-        android:background="@drawable/curved_button"
         android:layout_width="86dp"
         android:layout_height="51dp"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="36dp"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/curved_button"
         android:scaleType="fitXY"
         android:text="ΠΡΟΒΟΛΗ ΧΑΡΤΗ"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total" />
+        app:layout_constraintTop_toTopOf="@+id/infoButton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Space
+        android:id="@+id/space"
         android:layout_width="355dp"
         android:layout_height="18dp"
-        android:layout_marginTop="8dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.577"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoButton"
-        app:layout_constraintVertical_bias="0.251" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
