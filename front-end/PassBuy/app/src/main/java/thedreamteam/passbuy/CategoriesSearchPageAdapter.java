@@ -19,24 +19,22 @@ import java.util.ArrayList;
 
 import thedreamteam.passbuy.R;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mItemNames = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<String> mCategoriesNames = new ArrayList<>();
     private Context mContext;
 
-    public SearchResultsAdapter(Context mContext, ArrayList<String> mItemNames, ArrayList<String> mImages) {
-        this.mItemNames = mItemNames;
-        this.mImages = mImages;
+    public CategoriesSearchPageAdapter(Context mContext, ArrayList<String> mCategoriesNames) {
+        this.mCategoriesNames = mCategoriesNames;
         this.mContext = mContext;
     }
 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_results_recycler,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_search_page_recycler,parent,false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -48,23 +46,21 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return mItemNames.size();
+        return 9;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
 
-        ImageView image;
-        TextView item_name;
-        ImageButton add_item;
+        TextView category;
+        ImageButton go_to;
         ConstraintLayout parent_layout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.imageView);
-            item_name = itemView.findViewById(R.id.textView);
-            add_item = itemView.findViewById(R.id.add_button);
-            parent_layout = itemView.findViewById(R.id.parent_layout2);
+            category = itemView.findViewById(R.id.category_name);
+            go_to = itemView.findViewById(R.id.next_arrow_button);
+            parent_layout = itemView.findViewById(R.id.parent_layout3);
         }
     }
 }
