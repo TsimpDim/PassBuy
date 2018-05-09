@@ -2,9 +2,11 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#848B94</color>
+    <color name="colorGrey">#848B94</color>
     <color name="colorToolbar">#227DC2</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorCyan">#00DBFF</color>
     <color name="colorTextBold">#291F1F</color>
+    <color name="colorHeader">#333C47</color>
 </resources>
