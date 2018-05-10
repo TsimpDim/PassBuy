@@ -9,13 +9,11 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="37dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Lidl"
         android:textSize="23sp"
-        app:layout_constraintEnd_toStartOf="@+id/total"
-        app:layout_constraintHorizontal_bias="0.041"
+        app:fontFamily="@font/roboto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,6 +25,7 @@
         android:layout_marginEnd="36dp"
         android:text="4,65€"
         android:textSize="43sp"
+        app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toTopOf="@+id/mapsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,6 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         android:text="Πυλαία"
+        app:fontFamily="@font/roboto"
         app:layout_constraintEnd_toStartOf="@+id/infoButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +55,7 @@
         android:text="ΠΛΗΡΟΦΟΡΙΕΣ ΚΑΛΑΘΙΟΥ"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
+        app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toTopOf="@+id/space"
         app:layout_constraintEnd_toStartOf="@+id/mapsButton"
         app:layout_constraintTop_toTopOf="parent" />
@@ -69,6 +70,7 @@
         android:text="ΠΡΟΒΟΛΗ ΧΑΡΤΗ"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
+        app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/infoButton"

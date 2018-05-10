@@ -31,6 +31,7 @@
         android:text="Καλύτερη τιμή :"
         android:textSize="23sp"
         android:textColor="@color/colorWhite"
+        app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toBottomOf="@+id/blackbg"
         app:layout_constraintEnd_toEndOf="@+id/blackbg"
         app:layout_constraintStart_toStartOf="@+id/blackbg"
