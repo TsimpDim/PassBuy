@@ -1,21 +1,18 @@
 let mysql = require('mysql');
-let db_creds = require('./db_creds.json'); // DB config file
-let db;
+let db_conf = require('./db_conf.json'); // DB config file
+let pool  = mysql.createPool(db_conf); // Create DB connection pool
 
-
-
-function connectDatabase(){
-    if(!db){
-        db = mysql.createConnection(db_creds);
-
-        db.connect(function(err){ // Connect to DB
-            if(err) throw err;
-
-            console.log("Database connection successful.");
-        });
+// Run test DB connection
+pool.getConnection((err, connection) => {
+    if(err){
+      // Display only an error message
+      console.log("Error: Could not connect to database");
+  }
+    else {
+      console.log("Database connection successful");
+      // Close test connection
+      connection.release();
     }
+});
 
-    return db;
-}
-
-module.exports = connectDatabase();
+module.exports = pool;
