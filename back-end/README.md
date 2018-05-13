@@ -14,14 +14,15 @@
     
 **Για τη σύνδεση με τη (τοπική) βάση:**
 
-Χρειάζεται ένα αρχείο [JSON](https://www.json.org) `db_creds.json` με τα στοιχεία της βάσης στο φάκελο `\api`, δηλαδή :  
+Χρειάζεται ένα αρχείο [JSON](https://www.json.org) `db_conf.json` με τα στοιχεία της βάσης στο φάκελο `\api`, δηλαδή :  
 
 ```
 {
     "host":"xx",
     "user":"yy",
     "password":"zz",
-    "database":"ww"
+    "database":"ww",
+    "connectionLimit":"ωω"
 }
 ```  
 
