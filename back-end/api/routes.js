@@ -118,23 +118,10 @@ router.get('/api/prices/:pr_id', function(req, res) {
       if (err || result.length == 0) {
         res.send(error_handling("Could not find prices for the given product"));
       } else {
-        // Set up response object
-        // Default value is the product_id itself
-        // Type cast to integer avoiding letters being added on the final JSON object
-        let response = {"product_id" : parseInt(req.params.pr_id)};
-
-        // Add 'prices' array
-        response.prices = [];
-
-        // Add product prices to 'prices' array
-        result.forEach(element => {
-            response.prices.push({
-                "store_id" : element.store_id,
-                "price" : element.price
-            });
-        });
         // Send the results if no errors encountered
-        res.send(response);
+
+        result.forEach(function(v){ delete v.product_id });
+        res.send(result);
       }
     });
 });
