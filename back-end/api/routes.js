@@ -77,7 +77,6 @@ router.get('/api/products/:arg', function(req, res) {
         
     // Argument is a string - thus a category or a search keyword
     } else {
-        let response = {"category" : -1};
 
         db.query("SELECT name, description, image_url, product_id, category FROM ??",[req.params.arg],
         function(err, result, fields){
@@ -87,15 +86,11 @@ router.get('/api/products/:arg', function(req, res) {
             res.send(error_handling("Could not retrieve products from the given category"));
           } else {
 
-            // Get category from the first product
-            response.category = result[0].category;
             // Since every product is guaranteed to be from the same category
             result.forEach(function(v){ delete v.category });
-            response.products = result;
 
             // Send the results if no errors encountered
-            res.send(response);
-
+            res.send(result);
           }
         });
     }
