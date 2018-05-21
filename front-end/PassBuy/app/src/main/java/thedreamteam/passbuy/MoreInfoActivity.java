@@ -1,12 +1,11 @@
 package thedreamteam.passbuy;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-public class MoreInfoActivity extends AppCompatActivity {
+public class MoreInfoActivity extends PortraitActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;

@@ -1,13 +1,12 @@
 package thedreamteam.passbuy;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class CategoriesSearchPage extends AppCompatActivity {
+public class CategoriesSearchPage extends PortraitActivity {
 
 
     private ArrayList<String> categoryname = new ArrayList<>();

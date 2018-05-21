@@ -1,13 +1,12 @@
 package thedreamteam.passbuy;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class BasketInfo extends AppCompatActivity {
+public class BasketInfo extends PortraitActivity {
 
 
     private ArrayList<String> itemnames = new ArrayList<>();
