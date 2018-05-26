@@ -21,6 +21,11 @@
         android:textColor="#000000"
         android:textSize="19sp"
         app:fontFamily="@font/roboto"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -47,11 +52,12 @@
         android:layout_width="53dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/orange"
-        tools:layout_editor_absoluteX="6dp" />
+        app:srcCompat="@drawable/orange" />
 
     <ImageView
         android:id="@+id/imageView3"

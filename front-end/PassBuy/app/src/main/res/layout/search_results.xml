@@ -10,7 +10,7 @@
         layout="@layout/toolbar" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/search_text"
         android:layout_width="298dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -23,8 +23,8 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/search_button"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="12dp"
         android:layout_marginStart="13dp"
@@ -32,33 +32,28 @@
         android:background="#0000"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText"
+        app:layout_constraintStart_toEndOf="@+id/search_text"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/search_icon" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_searched_items"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </ScrollView>
-
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        app:srcCompat="@drawable/grey_line"
-        tools:layout_editor_absoluteX="0dp" />
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_searched_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_text"
+        app:srcCompat="@drawable/grey_line" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_searched_items"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
 </android.support.constraint.ConstraintLayout>
