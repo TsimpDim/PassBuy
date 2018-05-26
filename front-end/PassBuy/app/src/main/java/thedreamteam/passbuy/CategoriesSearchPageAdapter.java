@@ -1,6 +1,8 @@
 package thedreamteam.passbuy;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -16,18 +18,21 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import thedreamteam.passbuy.R;
 
-public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<CategoriesSearchPageAdapter.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mCategoriesNames = new ArrayList<>();
+    private List<Category> mCategoriesNames = new ArrayList<>();
+    private Basket basket = new Basket();
     private Context mContext;
 
-    public CategoriesSearchPageAdapter(Context mContext, ArrayList<String> mCategoriesNames) {
+    public CategoriesSearchPageAdapter(Context mContext, List<Category> mCategoriesNames, Basket basket) {
         this.mCategoriesNames = mCategoriesNames;
+        this.basket = basket;
         this.mContext = mContext;
     }
 
@@ -40,13 +45,32 @@ public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        //todo
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.category.setText(mCategoriesNames.get(position).getName());
+        holder.go_to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SearchResults.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("basket", basket);
+                bundle.putCharSequence("search_text","");
+                bundle.putInt("category_id", mCategoriesNames.get(position).getCategoryId());
+                intent.putExtra("bundle",bundle);
+
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 9;
+        return mCategoriesNames.size();
+    }
+
+    public void replaceList(List<Category> newList) {
+        mCategoriesNames.clear();
+        mCategoriesNames.addAll(newList);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
