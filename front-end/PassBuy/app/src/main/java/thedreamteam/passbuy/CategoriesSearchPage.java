@@ -109,3 +109,4 @@ public class CategoriesSearchPage extends PortraitActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 }
+
