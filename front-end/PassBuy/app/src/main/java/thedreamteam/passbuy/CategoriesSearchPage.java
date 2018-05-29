@@ -22,6 +22,7 @@ public class CategoriesSearchPage extends PortraitActivity {
 
     private TextView search_text;
     private ImageButton search_button;
+    private ImageButton back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class CategoriesSearchPage extends PortraitActivity {
 
         search_text = findViewById(R.id.search_text);
         search_button = findViewById(R.id.search_button);
+        back_button = findViewById(R.id.backButton);
 
 
         //get basket from previous activity
@@ -67,6 +69,27 @@ public class CategoriesSearchPage extends PortraitActivity {
             }
         });
 
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(v.getContext() , HomeScreen.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("basket", basket);
+                intent.putExtra("bundle",bundle);
+
+                startActivity(intent);
+            }
+        });
+
+
+
+
+    }
+
+    public void onBackPressed(){
+
+        back_button.performClick();
 
     }
 
@@ -86,4 +109,3 @@ public class CategoriesSearchPage extends PortraitActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 }
-
