@@ -1,5 +1,7 @@
 package thedreamteam.passbuy;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +14,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResults extends PortraitActivity {
+public class SearchResults extends PortraitActivity implements PopupQuantityDialog.DialogListener{
 
 
     private GsonWorker gson = new GsonWorker();
     private List<Product> products = new ArrayList<>();
+    private List<Price> prices;
     private Basket basket = new Basket();
     private SearchResultsAdapter mAdapter = new SearchResultsAdapter(this, products,basket);
     private ImageButton search_button;
@@ -25,6 +28,9 @@ public class SearchResults extends PortraitActivity {
     private String searched_text;
     private int category_id;
 
+    private ImageButton home_screen;
+    private ImageButton back_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +38,8 @@ public class SearchResults extends PortraitActivity {
 
         search_button = findViewById(R.id.search_button);
         search_text = findViewById(R.id.search_text);
+        home_screen = findViewById(R.id.homeButton);
+        back_button = findViewById(R.id.backButton);
 
         Bundle bundle = getIntent().getBundleExtra("bundle");
         basket = (Basket) bundle.getSerializable("basket");
@@ -60,6 +68,39 @@ public class SearchResults extends PortraitActivity {
             }
         });
 
+        home_screen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(v.getContext() , HomeScreen.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("basket", basket);
+                intent.putExtra("bundle",bundle);
+
+                startActivity(intent);
+            }
+        });
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(v.getContext() , CategoriesSearchPage.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("basket", basket);
+                intent.putExtra("bundle",bundle);
+
+                startActivity(intent);
+            }
+        });
+
+
+
+    }
+
+    public void onBackPressed(){
+
+        back_button.performClick();
 
     }
 
@@ -116,5 +157,31 @@ public class SearchResults extends PortraitActivity {
         t.start();
 
     }
+
+    @Override
+    public void getQuantity(Product p, int q) {
+
+        if(q!=0){
+            Runnable r = () -> {
+                prices = gson.getProductPrices(p.getProductId());
+                if (prices != null) {
+                    p.setPrices(prices);
+                    if(basket.getProducts().contains(p)){
+                        basket.getQuantities().set(basket.getProducts().indexOf(p),q);
+                        mAdapter.replaceBasket(basket);
+                        runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                    }
+                    else {
+                        basket.getProducts().add(p);
+                        basket.getQuantities().add(q);
+                        mAdapter.replaceBasket(basket);
+                        runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                    }
+                }
+            };
+            new Thread(r).start();}
+
+    }
+
 
 }
