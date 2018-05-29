@@ -18,17 +18,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class HomeScreen extends PortraitActivity {
+public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.DialogListener {
 
     public static final int super_market_number = 4;
 
     private Basket basket = new Basket();
     private List<Product> products = new ArrayList<Product>();
     private GsonWorker gson = new GsonWorker();
-    private HomeScreenBasketAdapter mAdapter = new HomeScreenBasketAdapter(this, basket.getProducts(), basket.getQuantities());
+    private HomeScreenBasketAdapter mAdapter = new HomeScreenBasketAdapter(this, basket.getProducts(), basket.getQuantities(), basket);
     private List<Store> stores = new ArrayList<Store>();
     private String best_store;
-    private double best_price;
+    private double best_price ;
     private Context mContext;
 
     private ImageButton delete_button;
@@ -56,13 +56,16 @@ public class HomeScreen extends PortraitActivity {
         best_supermarket.setSelected(true);
 
         //Will work when popup is ready
-        //Bundle bundle = getIntent().getBundleExtra("bundle");
-        //basket = (Basket) bundle.getSerializable("basket");
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("bundle");
+        if(bundle !=null){
+            basket = (Basket) bundle.getSerializable("basket");
+        }
 
         //for now we have these
 //DUMMY DATA
         //WILL DELETE.
-        List<Price> prices = new ArrayList<Price>();
+        /*List<Price> prices = new ArrayList<Price>();
         Price price1 = new Price();
         Price price2 = new Price();
         Price price3 = new Price();
@@ -80,23 +83,23 @@ public class HomeScreen extends PortraitActivity {
         prices.add(price3);
         prices.add(price4);
         Product product = new Product("ΠΟΡΤΟΚΑΛΙΑ ΗΜΑΘΙΑΣ", "Kafes me plousio gala", "http://dummy", 2,1230, prices);
-
         products.add(product);
         ArrayList<Integer> qs = new ArrayList<Integer>();
         qs.add(5);
         //Get your products into your basket
         basket.setProducts(products);
         basket.setQuantities(qs);
+*/
 
 
-        initImageBitmaps();
+        initRecyclerView();
+        mAdapter.replaceList(basket);
+        mAdapter.notifyDataSetChanged();
 
 
 
 
-
-
-        if(basket.getProducts()!= null || !(basket.getProducts().isEmpty())){
+        if(!basket.getProducts().isEmpty()){
             //UPDATE BEST PRICE and SUPERMARKET NAME
             empty_basket_text.setText("");
             updateBestSum();
@@ -128,6 +131,7 @@ public class HomeScreen extends PortraitActivity {
         });
 
 
+
         //Delete Button Functions Onclick
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +144,10 @@ public class HomeScreen extends PortraitActivity {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 basket.getProducts().clear();
-                                initRecyclerView();
+                                basket.getQuantities().clear();
+                                basket.getTotalprices().clear();
+                                mAdapter.replaceList(basket);
+                                mAdapter.notifyDataSetChanged();
                                 empty_basket_text.setText("Το καλάθι σου είναι άδειο :(");
                                 best_sum.setText("-");
                                 best_supermarket.setText("");
@@ -166,19 +173,13 @@ public class HomeScreen extends PortraitActivity {
     }
 
 
-    private void initImageBitmaps(){
-
-        initRecyclerView();
-
-    }
 
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.recycler_view_home_screen);
 
         //RecyclerView List constructor
         recyclerView.setHasFixedSize(true);
-        HomeScreenBasketAdapter adapter = new HomeScreenBasketAdapter(this, basket.getProducts(), basket.getQuantities());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
@@ -201,8 +202,8 @@ public class HomeScreen extends PortraitActivity {
             total_prices.get(y).setStoreId(y+1);
 
             for(int i=0 ; i<basket.getProducts().size() ; i++){
-                double temp_price = total_prices.get(y).getPrice() + (basket.getProducts().get(i).getPrices().get(y).getPrice()*basket.getQuantities().get(i));
-                // SHOULD MULTIPLY *quantity;
+                double temp_price = total_prices.get(y).getPrice() + (basket.getProducts().get(i).getPrices().get(y).getPrice())*(basket.getQuantities().get(i));
+
                 total_prices.get(y).setPrice(temp_price);
             }
         }
@@ -250,10 +251,29 @@ public class HomeScreen extends PortraitActivity {
         best_price = total_prices.get(0).getPrice();
 
         //Replace this with a String , its double
-        best_sum.setText(total_prices.get(0).getPrice() + "€");
+        best_sum.setText(String.format(" %.2f", total_prices.get(0).getPrice()) + "€");
 
 
     }
+
+    @Override
+    public void getQuantity(Product product, int q) {
+        if(q==0){
+            basket.getQuantities().remove(basket.getProducts().indexOf(product));
+            basket.getProducts().remove(product);
+            mAdapter.replaceList(basket);
+            mAdapter.notifyDataSetChanged();
+            updateBestSum();
+        }
+        else{
+            basket.getQuantities().set(basket.getProducts().indexOf(product),q);
+            mAdapter.replaceList(basket);
+            mAdapter.notifyDataSetChanged();
+            updateBestSum();
+        }
+    }
+
+
 }
 
 
