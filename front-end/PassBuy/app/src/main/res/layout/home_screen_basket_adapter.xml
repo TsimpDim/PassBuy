@@ -52,15 +52,16 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="4dp"
         android:background="#0000"
+        android:paddingLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delete_button"
+        app:layout_constraintEnd_toStartOf="@+id/delete_button_recycler"
         app:layout_constraintStart_toEndOf="@+id/quantity_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/edit_icon" />
 
     <ImageButton
-        android:id="@+id/delete_button"
+        android:id="@+id/delete_button_recycler"
         android:layout_width="31dp"
         android:layout_height="21dp"
         android:layout_marginBottom="5dp"
