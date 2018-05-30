@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:drawable/dialog_holo_light_frame">
@@ -15,13 +16,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="148dp"
+        android:id="@+id/item_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="3dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="18dp"
         android:text="Πορτοκάλια Ημαθίας"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
@@ -33,21 +34,6 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.173" />
 
-    <TextView
-        android:id="@+id/ratio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="233dp"
-        android:layout_marginStart="8dp"
-        android:text="500γρ / τεμ."
-        android:textColor="@color/colorWhite"
-        android:textSize="12sp"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/prodImage"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
-
     <ImageView
         android:id="@+id/prodImage"
         android:layout_width="48dp"
@@ -55,7 +41,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="@+id/name"
+        app:layout_constraintTop_toTopOf="@+id/item_name"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/orange" />
 
@@ -79,16 +65,20 @@
         android:id="@+id/prodDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:text="Τα πορτοκάλια αποτελούν πλούσια πηγή βιταμίνης C, η οποία λόγω της αντιοξειδωτικής της δράσης, προστατεύει την υγεία της καρδιάς και την εμφάνιση διαφόρων τύπου καρκίνου. Προτιμήστε να τα καταναλώνετε ολόκληρα, αντί για χυμό, καθώς έτσι είναι πλουσιότερα σε φυτικές ίνες. Αν τα στύψετε, μην σουρώσετε το χυμό, γιατί με τον τρόπο αυτό αφαιρείτε φυτικές ίνες."
+        android:textAlignment="viewStart"
         android:textSize="13sp"
         app:fontFamily="@font/roboto"
+        app:layout_constraintBottom_toTopOf="@+id/quantity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/desc" />
+        app:layout_constraintTop_toBottomOf="@+id/desc"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <TextView
         android:id="@+id/quantity"
@@ -111,8 +101,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="15dp"
         android:background="@null"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/count"
         app:srcCompat="@drawable/minus" />
@@ -122,8 +116,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="68dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="5dp"
         android:background="@null"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/count"
         app:srcCompat="@drawable/plus" />
@@ -134,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="39dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="8dp"
         android:text="0"
         android:textColor="@color/colorTextBold"
         android:textSize="53sp"
@@ -142,7 +140,7 @@
         app:layout_constraintEnd_toStartOf="@+id/plus"
         app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toEndOf="@+id/minusButton"
-        app:layout_constraintTop_toBottomOf="@+id/prodDesc" />
+        app:layout_constraintTop_toBottomOf="@+id/quantity" />
 
     <ImageView
         android:id="@+id/smallDivider"

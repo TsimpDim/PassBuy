@@ -1,6 +1,9 @@
 package thedreamteam.passbuy;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +32,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     private List<Product> products;
     private Basket basket = new Basket();
     private Context mContext;
+    private Product mproduct;
 
     public SearchResultsAdapter(Context mContext, List<Product> products, Basket basket) {
         this.products = products;
@@ -52,10 +56,40 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             Picasso.get().load(products.get(position).getImageUrl()).into(holder.image);
 
         //Experimental. Set tick on added items (that are currently in basket)
-        //if(!(basket.getProducts().isEmpty())){
-        //if(basket.getProducts().contains(products.get(position))){
-       //     holder.add_item.setPressed(true);
-       // }}
+        //This should use HashCode() maybe . It's a better solution.
+        /*if(!(basket.getProducts().isEmpty())) {
+            for (Product prod : basket.getProducts()) {
+                if (prod.getProductId().equals(products.get(position).getProductId())) {
+                    holder.add_item.setPressed(true);
+                    break;
+                } else {
+                    holder.add_item.setPressed(false);
+                }
+            }
+        }*/
+
+        if(!(basket.getProducts().isEmpty())) {
+            if(basket.getProducts().contains(products.get(position))){
+                holder.add_item.setPressed(true);
+            }
+            else
+                holder.add_item.setPressed(false);}
+
+        holder.add_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupQuantityDialog dialogFragment = new PopupQuantityDialog ();
+
+                FragmentManager fm = ((Activity) mContext).getFragmentManager();
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product",products.get(position));
+                bundle.putSerializable("basket",basket);
+                dialogFragment.setArguments(bundle);
+                dialogFragment.show(fm, "Sample Fragment");
+
+            }
+        });
     }
 
     @Override
@@ -67,6 +101,17 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         products.clear();
         products.addAll(newList);
     }
+
+    public void replaceBasket(Basket basket){
+        this.basket = basket;
+    }
+
+
+
+    public Basket getBasket(){
+        return basket;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -86,4 +131,3 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         }
     }
 }
-
