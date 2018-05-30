@@ -9,9 +9,9 @@ import java.util.List;
 
 public class Basket implements Serializable {
 
-    private List<Product> products ;
-    private ArrayList<Integer> quantities;
-    private List<Price> total_prices;
+    private List<Product> products = new ArrayList<>();
+    private ArrayList<Integer> quantities = new ArrayList<>();
+    private List<Price> total_prices = new ArrayList<>();
 
     public List<Product> getProducts() {
         return products;
