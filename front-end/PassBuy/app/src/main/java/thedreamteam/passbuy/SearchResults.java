@@ -139,7 +139,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
     private void getProductsByCategory(){
 
         Runnable r = () -> {
-            products = gson.getProductsByCategory(category_id);
+            products = gson.getProductsByCategory(category_id-1);
             if (products != null) {
                 mAdapter.replaceList(products);
                 runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
