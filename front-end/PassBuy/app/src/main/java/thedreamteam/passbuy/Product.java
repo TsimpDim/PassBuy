@@ -3,10 +3,11 @@ package thedreamteam.passbuy;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
@@ -25,6 +26,15 @@ public class Product {
     @SerializedName("prices")
     @Expose
     private List<Price> prices = new ArrayList<>();
+
+    public Product(String name, String description, String imageUrl, Integer category, Integer productId, List<Price> prices) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.productId = productId;
+        this.prices = prices;
+    }
 
     public String getName() {
         return name;
