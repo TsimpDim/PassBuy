@@ -15,21 +15,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import thedreamteam.passbuy.R;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mItemNames = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private List<Product> products;
+    private Basket basket = new Basket();
     private Context mContext;
 
-    public SearchResultsAdapter(Context mContext, ArrayList<String> mItemNames, ArrayList<String> mImages) {
-        this.mItemNames = mItemNames;
-        this.mImages = mImages;
+    public SearchResultsAdapter(Context mContext, List<Product> products, Basket basket) {
+        this.products = products;
+        this.basket = basket;
         this.mContext = mContext;
     }
 
@@ -42,13 +45,27 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        //todo
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.item_name.setText(products.get(position).getName());
+
+        if (!products.get(position).getImageUrl().isEmpty())
+            Picasso.get().load(products.get(position).getImageUrl()).into(holder.image);
+
+        //Experimental. Set tick on added items (that are currently in basket)
+        //if(!(basket.getProducts().isEmpty())){
+        //if(basket.getProducts().contains(products.get(position))){
+       //     holder.add_item.setPressed(true);
+       // }}
     }
 
     @Override
     public int getItemCount() {
-        return mItemNames.size();
+        return products.size();
+    }
+
+    public void replaceList(List<Product> newList) {
+        products.clear();
+        products.addAll(newList);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -63,6 +80,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             image = itemView.findViewById(R.id.imageView);
             item_name = itemView.findViewById(R.id.textView);
+            item_name.setSelected(true);
             add_item = itemView.findViewById(R.id.add_button);
             parent_layout = itemView.findViewById(R.id.parent_layout2);
         }

@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CategoriesSearchPage"></activity>
+        <activity android:name=".SearchResults"></activity>
 
     </application>
 
