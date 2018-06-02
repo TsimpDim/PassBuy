@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -84,6 +86,17 @@ public class CategoriesSearchPage extends PortraitActivity {
             }
         });
 
+        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    search_button.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,8 +132,8 @@ public class CategoriesSearchPage extends PortraitActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view33);
 
         recyclerView.setHasFixedSize(true);
-        CategoriesSearchPageAdapter adapter = new CategoriesSearchPageAdapter(this, categorynames,basket);
-        recyclerView.setAdapter(adapter);
+        //CategoriesSearchPageAdapter adapter = new CategoriesSearchPageAdapter(this, categorynames,basket);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 }
