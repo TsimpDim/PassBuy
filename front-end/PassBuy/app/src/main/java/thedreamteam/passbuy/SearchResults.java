@@ -6,9 +6,12 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -78,6 +81,17 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                 intent.putExtra("bundle",bundle);
 
                 startActivity(intent);
+            }
+        });
+
+        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    search_button.performClick();
+                    return true;
+                }
+                return false;
             }
         });
 
