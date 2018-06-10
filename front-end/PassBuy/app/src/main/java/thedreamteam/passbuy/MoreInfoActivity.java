@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -69,6 +70,16 @@ public class MoreInfoActivity extends PortraitActivity {
         // Draw line divider
         DividerItemDecoration lineDivider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(lineDivider);
+
+        // Acquire user location
+        if (Build.VERSION.SDK_INT > 23) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            else
+                this.requestLocation();
+        }
+        else
+            this.requestLocation();
     }
 
     @Override
@@ -85,15 +96,17 @@ public class MoreInfoActivity extends PortraitActivity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        long timeDelta = System.currentTimeMillis() - location.getTime();
+        if (location != null) {
+            long timeDelta = System.currentTimeMillis() - location.getTime();
 
-        // Refresh location if our cached one is older than 2 minutes
-        if (timeDelta > (1000 * 60 * 2)) {
-            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
-            // onLocationChanged called
+            // Refresh location if our cached one is older than 2 minutes
+            if (timeDelta > (1000 * 60 * 2))
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
+            else
+                this.updateUserLocation(location);
         }
         else
-            this.updateUserLocation(location);
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
     }
 
     public void updateUserLocation(Location location) {
