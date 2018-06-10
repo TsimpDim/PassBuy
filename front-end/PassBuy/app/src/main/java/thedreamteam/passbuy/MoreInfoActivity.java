@@ -96,15 +96,17 @@ public class MoreInfoActivity extends PortraitActivity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        long timeDelta = System.currentTimeMillis() - location.getTime();
+        if (location != null) {
+            long timeDelta = System.currentTimeMillis() - location.getTime();
 
-        // Refresh location if our cached one is older than 2 minutes
-        if (timeDelta > (1000 * 60 * 2)) {
-            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
-            // onLocationChanged called
+            // Refresh location if our cached one is older than 2 minutes
+            if (timeDelta > (1000 * 60 * 2))
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
+            else
+                this.updateUserLocation(location);
         }
         else
-            this.updateUserLocation(location);
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
     }
 
     public void updateUserLocation(Location location) {
