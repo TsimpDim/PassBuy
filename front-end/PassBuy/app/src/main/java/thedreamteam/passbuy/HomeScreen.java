@@ -21,7 +21,7 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
 
     private Basket basket = new Basket();
     private GsonWorker gson = new GsonWorker();
-    private HomeScreenBasketAdapter mAdapter = new HomeScreenBasketAdapter(this, basket.getProducts(), basket.getQuantities(), basket);
+    private HomeScreenAdapter mAdapter = new HomeScreenAdapter(this, basket.getProducts(), basket.getQuantities(), basket);
     private List<Store> stores = new ArrayList<>();
     private String bestStore;
     private double bestPrice;
