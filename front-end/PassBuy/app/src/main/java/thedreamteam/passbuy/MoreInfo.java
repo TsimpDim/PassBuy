@@ -16,7 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoreInfoActivity extends PortraitActivity {
+public class MoreInfo extends PortraitActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -77,8 +77,7 @@ public class MoreInfoActivity extends PortraitActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             else
                 this.requestLocation();
-        }
-        else
+        } else
             this.requestLocation();
     }
 
@@ -104,8 +103,7 @@ public class MoreInfoActivity extends PortraitActivity {
                 locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
             else
                 this.updateUserLocation(location);
-        }
-        else
+        } else
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
     }
 
