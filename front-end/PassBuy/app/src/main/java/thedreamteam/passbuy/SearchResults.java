@@ -99,7 +99,10 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
         RecyclerView recyclerView = findViewById(R.id.recycler_view_searched_items);
 
         recyclerView.setHasFixedSize(true);
+
+        mAdapter.replaceBasket(basket);
         recyclerView.setAdapter(mAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 

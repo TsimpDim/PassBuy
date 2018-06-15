@@ -1,5 +1,6 @@
 package thedreamteam.passbuy;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
@@ -84,6 +85,12 @@ public class PopupQuantityDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         dialogListener = (DialogListener) context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        dialogListener = (DialogListener) activity;
     }
 
     @Override
