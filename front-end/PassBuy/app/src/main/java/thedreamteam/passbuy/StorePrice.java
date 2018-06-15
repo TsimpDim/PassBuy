@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Price implements Serializable {
+public class StorePrice implements Serializable {
     @SerializedName("store_id")
     @Expose
     private Integer storeId;

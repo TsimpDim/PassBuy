@@ -10,8 +10,8 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
     
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.more_info_recycler, parent, false);
-        return new ViewHolder(v);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.more_info_recycler, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -30,8 +30,6 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
         public TextView name;
         public TextView area;
         public TextView total;
-
-        //TODO: Speed up rendering by reducing findViewById calls
 
         public ViewHolder(View itemView) {
             super(itemView);
