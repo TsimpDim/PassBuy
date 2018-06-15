@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Product implements Serializable {
@@ -25,9 +24,9 @@ public class Product implements Serializable {
     private Integer productId;
     @SerializedName("prices")
     @Expose
-    private List<Price> prices = new ArrayList<>();
+    private List<StorePrice> prices;
 
-    public Product(String name, String description, String imageUrl, Integer category, Integer productId, List<Price> prices) {
+    public Product(String name, String description, String imageUrl, Integer category, Integer productId, List<StorePrice> prices) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -76,11 +75,11 @@ public class Product implements Serializable {
         this.productId = productId;
     }
 
-    public List<Price> getPrices() {
+    public List<StorePrice> getPrices() {
         return prices;
     }
 
-    public void setPrices(List<Price> prices) {
+    public void setPrices(List<StorePrice> prices) {
         this.prices = prices;
     }
 }
