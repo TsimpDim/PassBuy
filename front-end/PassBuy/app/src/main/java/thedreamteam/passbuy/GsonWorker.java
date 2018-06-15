@@ -13,18 +13,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class GsonWorker {
 
-    private final String pbUrl = "http://snf-812693.vm.okeanos.grnet.gr:8080/api";
-    private final String placesUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-    private final String placesKey = "YOUR_KEY";
+    private static final String pbUrl = "http://snf-812693.vm.okeanos.grnet.gr:8080/api";
+    private static final String placesUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+    private static final String placesKey = "YOUR_KEY";
 
-    private final String[] categories = {"beverages", "dairy", "delicatessen", "frozen",
+    private static final String[] apiCategories = {"beverages", "dairy", "delicatessen", "frozen",
             "fruits_veggies", "snacks", "health_beauty", "home", "meat_fish", "misc"};
 
     private Gson gson = new GsonBuilder().create();
@@ -32,6 +31,7 @@ public class GsonWorker {
 
     /**
      * Returns all stores
+     *
      * @return List<Store> if no error occurs, null otherwise
      */
     public List<Store> getStores() {
@@ -50,6 +50,7 @@ public class GsonWorker {
 
     /**
      * Returns all categories
+     *
      * @return List<Category> if no error occurs, null otherwise
      */
     public List<Category> getCategories() {
@@ -68,18 +69,19 @@ public class GsonWorker {
 
     /**
      * Returns all store prices for a product
+     *
      * @param productId The ID of the product
-     * @return List<Price> if no error occurs, null otherwise
+     * @return List<StorePrice> if no error occurs, null otherwise
      */
-    public List<Price> getProductPrices(Integer productId) {
-        List<Price> prices = null;
+    public List<StorePrice> getProductPrices(Integer productId) {
+        List<StorePrice> prices = null;
 
         // Get JSON string
         json = this.getJSON("/prices/" + productId);
 
         // Convert JSON to a List<Price> object if nothing ugly happened
         if (json != null)
-            prices = Arrays.asList(gson.fromJson(json, Price[].class));
+            prices = Arrays.asList(gson.fromJson(json, StorePrice[].class));
 
         // Return List<Price> if no error occurs, null otherwise
         return prices;
@@ -87,6 +89,7 @@ public class GsonWorker {
 
     /**
      * Returns information for a product
+     *
      * @param productId The ID of the product
      * @return Product object if no error occurs, null otherwise
      */
@@ -106,9 +109,10 @@ public class GsonWorker {
 
     /**
      * Returns the nearest supermarket in each chain
-     * @param stores The List of all store chains
+     *
+     * @param stores          The List of all store chains
      * @param userCoordinates The user's current location
-     * @return List<StoreLocation> if no error occurs, null otherwise
+     * @return List<StoreLocation>
      */
     public List<StoreLocation> getNearbyStores(List<Store> stores, Coordinates userCoordinates) {
         List<StoreLocation> locations = new ArrayList<>();
@@ -133,7 +137,7 @@ public class GsonWorker {
                     // Get vicinity
                     String vicinityResponse = result.getAsJsonPrimitive("vicinity").getAsString();
                     // Remove city from the response
-                    String vicinity = vicinityResponse.substring( 0, vicinityResponse.indexOf(","));
+                    String vicinity = vicinityResponse.substring(0, vicinityResponse.indexOf(','));
 
                     // We need to move in geometry -> location to get the coordinates
                     JsonElement location = result.get("geometry").getAsJsonObject().get("location");
@@ -144,15 +148,15 @@ public class GsonWorker {
                     storeLocation.setStoreId(store.getId());
                     locations.add(storeLocation);
                 }
-            }
-            else
-                return null;
+            } else
+                return locations;
         }
         return locations;
     }
 
     /**
      * Returns products with names matching the search argument
+     *
      * @param searcharg The search argument
      * @return List<Product> if no error occurs, null otherwise
      */
@@ -175,14 +179,15 @@ public class GsonWorker {
 
     /**
      * Returns products that belong to a certain category
-     * @param category_id The category id from the /api/categories endpoint
+     *
+     * @param categoryId The category id from the /api/categories endpoint
      * @return List<Product> if no error occurs, null otherwise
      */
-    public List<Product> getProductsByCategory(Integer category_id) {
+    public List<Product> getProductsByCategory(Integer categoryId) {
         List<Product> products = null;
 
         // Get JSON string
-        json = this.getJSON("/products/" + categories[category_id]);
+        json = this.getJSON("/products/" + apiCategories[categoryId]);
 
         // Convert JSON to a List<Product> object if nothing ugly happened
         if (json != null)
@@ -194,6 +199,7 @@ public class GsonWorker {
 
     /**
      * Returns UTF-8 encoded text for use in URLs
+     *
      * @param str The string to encode
      * @return The encoded string
      */
@@ -209,6 +215,7 @@ public class GsonWorker {
 
     /**
      * Returns the JSON string from a PassBuy API endpoint
+     *
      * @param endpoint The API endpoint to work on
      * @return The JSON string if no error occurred, null otherwise
      */
@@ -238,7 +245,7 @@ public class GsonWorker {
 
             // If an error is thrown, we're done here
             if (line.contains("error"))
-              return null;
+                return null;
 
             // Append the first line to the builder
             result.append(line);
@@ -263,7 +270,8 @@ public class GsonWorker {
 
     /**
      * Returns the JSON string from Google's Places API
-     * @param storeName The store chain to work on
+     *
+     * @param storeName       The store chain to work on
      * @param userCoordinates The user's location provided as a parameter
      * @return The JSON string if no error occurred, null otherwise
      */
@@ -289,11 +297,9 @@ public class GsonWorker {
 
         // Create a StringBuilder to store the JSON string
         StringBuilder result = new StringBuilder();
-
         try {
             // Make a connection with the API
             URL url = new URL(finalURL.toString());
-
             conn = (HttpURLConnection) url.openConnection();
 
             // Begin streaming the JSON
