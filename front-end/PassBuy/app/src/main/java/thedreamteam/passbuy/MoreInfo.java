@@ -12,20 +12,28 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MoreInfo extends PortraitActivity {
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private MoreInfoAdapter mAdapter;
     private GsonWorker gson = new GsonWorker();
     private List<Store> stores = new ArrayList<>();
     private List<StoreLocation> storeLocations = new ArrayList<>();
     private Coordinates userCoordinates = new Coordinates();
     private LocationManager locationManager;
+    private Basket basket;
+    private String bestStore;
+    private Double bestPrice;
+    private TextView bestPriceText;
+    private TextView bestSupermarket;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -53,33 +61,46 @@ public class MoreInfo extends PortraitActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.more_info);
-        mRecyclerView = findViewById(R.id.rv);
 
-        // Layout size remains fixed, improve performance
-        mRecyclerView.setHasFixedSize(true);
 
-        // Use a linear layout manager
-        // A vertically-scrollable collection of views
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // Use an adapter to feed data into the RecyclerView
-        mAdapter = new MoreInfoAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        //get basket from previous activity
+        Bundle bundle = getIntent().getBundleExtra("bundle");
+        basket = (Basket) bundle.getSerializable("basket");
+        bestPrice = (Double) bundle.getDouble("best_price");
+        bestStore = (String) bundle.getCharSequence("best_super");
+        stores = (List<Store>) bundle.getSerializable("stores");
 
-        // Draw line divider
-        DividerItemDecoration lineDivider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        mRecyclerView.addItemDecoration(lineDivider);
+        Collections.sort(basket.getTotalPrices(), new IdsComparator());
+
+
+        bestPriceText = findViewById(R.id.best_price);
+        bestSupermarket = findViewById(R.id.best_supermarket);
+
+        bestPriceText.setText(String.format("%.2f €", bestPrice));
+        bestSupermarket.setText(bestStore);
+
+        bestSupermarket.setSelected(true);
+        bestPriceText.setSelected(true);
+
 
         // Acquire user location
         if (Build.VERSION.SDK_INT > 23) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             else
-                this.requestLocation();
+            {this.requestLocation();}
         } else
-            this.requestLocation();
+        {this.requestLocation(); }
+
+
+        initRecyclerView();
+
+
     }
+
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -107,6 +128,23 @@ public class MoreInfo extends PortraitActivity {
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
     }
 
+    private void initRecyclerView(){
+
+       RecyclerView mRecyclerView;
+       mRecyclerView = findViewById(R.id.rv);
+
+        // Layout size remains fixed, improve performance
+        mRecyclerView.setHasFixedSize(true);
+
+        // Use an adapter to feed data into the RecyclerView
+        mAdapter = new MoreInfoAdapter(this, basket,stores, storeLocations);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Draw line divider
+        DividerItemDecoration lineDivider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        mRecyclerView.addItemDecoration(lineDivider);
+    }
+
     public void updateUserLocation(Location location) {
         userCoordinates.setLat(location.getLatitude());
         userCoordinates.setLng(location.getLongitude());
@@ -115,11 +153,30 @@ public class MoreInfo extends PortraitActivity {
         // Demo
         Runnable r = () -> {
             // Remove this, we will already have the store list
-            stores = gson.getStores();
             storeLocations = gson.getNearbyStores(stores, userCoordinates);
+            mAdapter.replaceLocations(storeLocations);
+            runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+            Log.i("hey i got urstores", "updateUserLocation: yo");
         };
 
         Thread t = new Thread(r);
-        t.start();
+        t.start();}
+        }
+
+
+//Comparator that compares prices
+//THIS SHOULD CHANGE WITH JAVA 8 WAY
+class IdsComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+        //Store s1=(Store)o1;
+        //Price s2=(Price)o2;
+
+        if (((StorePrice) o1).getStoreId() == ((StorePrice) o2).getStoreId())
+            return 0;
+        else if (((StorePrice) o1).getStoreId() > ((StorePrice) o2).getStoreId())
+            return 1;
+        else
+            return -1;
     }
+
 }

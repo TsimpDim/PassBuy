@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -87,6 +90,40 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         });
 
 
+        moreInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!basket.getProducts().isEmpty()) {
+
+                    if(stores!=null){
+                        if(stores.isEmpty()){
+                            new Thread(() -> {
+                                stores = gson.getStores();
+                            }).start();
+                        }
+                    }
+
+
+
+                    Intent intent =  new Intent(v.getContext() , MoreInfo.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("basket", basket);
+                    bundle.putSerializable("stores", (Serializable) stores);
+                    bundle.putCharSequence("best_super",bestStore);
+                    bundle.putDouble("best_price",bestPrice);
+                    intent.putExtra("bundle", bundle);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(v.getContext(), "Το καλάθι σου είναι άδειο. Πρόσθεσε προϊόντα.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
         //Delete Button Functions Onclick
         deleteButton.setOnClickListener(view -> {
 
@@ -143,6 +180,8 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
             }
         }
 
+
+        basket.setTotalPrices(totalPrices);
 
         //Sort Total Prices
         //THIS SHOULD CHANGE WITH JAVA 8 WAY
