@@ -5,46 +5,32 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BasketInfo extends PortraitActivity {
 
 
-    private ArrayList<String> itemnames = new ArrayList<>();
-    private ArrayList<String> itemq = new ArrayList<>();
-    private ArrayList<String> itemprices = new ArrayList<>();
+    private List<String> itemNames = new ArrayList<>();
+    private List<String> itemq = new ArrayList<>();
+    private List<String> itemPrices = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.basket_info);
         initImageBitmaps();
-
     }
 
 
-    private void initImageBitmaps(){
-
-        itemnames.add("Πορτοκάλια Ημαθίας");
-        itemq.add("KOLLO");
-        itemprices.add("Porto");
-
-        itemnames.add("Πορτοκάλια22");
-        itemq.add("KOL35LO");
-        itemprices.add("Port4o");
-
-        itemnames.add("Πορτοκάλια 43");
-        itemq.add("KOL3LO");
-        itemprices.add("Por5to");
-
+    private void initImageBitmaps() {
         initRecyclerView();
-
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view22);
 
         recyclerView.setHasFixedSize(true);
-        BasketInfoAdapter adapter = new BasketInfoAdapter(this, itemnames, itemq , itemprices);
+        BasketInfoAdapter adapter = new BasketInfoAdapter(this, itemNames, itemq, itemPrices);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
