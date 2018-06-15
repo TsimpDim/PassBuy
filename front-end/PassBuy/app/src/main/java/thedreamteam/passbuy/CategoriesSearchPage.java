@@ -18,7 +18,7 @@ public class CategoriesSearchPage extends PortraitActivity {
     private Basket basket = new Basket();
     private GsonWorker gson = new GsonWorker();
 
-    private CategoriesSearchPageAdapter mAdapter = new CategoriesSearchPageAdapter(this, categoryNames, basket);
+    private CategoriesSearchPageAdapter mAdapter;
     private TextView searchText;
     private ImageButton searchButton;
     private ImageButton backButton;
@@ -102,7 +102,10 @@ public class CategoriesSearchPage extends PortraitActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view33);
 
         recyclerView.setHasFixedSize(true);
+
+        mAdapter = new CategoriesSearchPageAdapter(this, categoryNames, basket);
         recyclerView.setAdapter(mAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 }
