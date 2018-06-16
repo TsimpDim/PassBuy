@@ -11,7 +11,7 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,21 +21,21 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view22"
-        android:layout_width="361dp"
+        android:layout_width="0dp"
         android:layout_height="416dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view22"
-        app:srcCompat="@drawable/blackbg"
-        tools:layout_editor_absoluteX="0dp" />
+        app:srcCompat="@drawable/blackbg" />
 
     <ImageButton
         android:id="@+id/imageButton2"

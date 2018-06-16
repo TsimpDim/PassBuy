@@ -2,10 +2,12 @@ package thedreamteam.passbuy;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -32,6 +35,8 @@ public class MoreInfo extends PortraitActivity {
     private Basket basket;
     private String bestStore;
     private Double bestPrice;
+    private ImageButton homeScreen;
+    private ImageButton backButton;
     private TextView bestPriceText;
     private TextView bestSupermarket;
 
@@ -61,6 +66,9 @@ public class MoreInfo extends PortraitActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.more_info);
+
+        backButton = findViewById(R.id.backButton);
+        homeScreen = findViewById(R.id.homeButton);
 
 
 
@@ -95,6 +103,26 @@ public class MoreInfo extends PortraitActivity {
 
 
         initRecyclerView();
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), HomeScreen.class);
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putSerializable("basket", basket);
+            intent.putExtra("bundle", bundle2);
+
+            startActivity(intent);
+        });
+
+        homeScreen.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), HomeScreen.class);
+
+            Bundle bundle12 = new Bundle();
+            bundle12.putSerializable("basket", basket);
+            intent.putExtra("bundle", bundle12);
+
+            startActivity(intent);
+        });
 
 
     }
@@ -137,7 +165,7 @@ public class MoreInfo extends PortraitActivity {
         mRecyclerView.setHasFixedSize(true);
 
         // Use an adapter to feed data into the RecyclerView
-        mAdapter = new MoreInfoAdapter(this, basket,stores, storeLocations);
+        mAdapter = new MoreInfoAdapter(this, basket,stores, storeLocations, userCoordinates);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Draw line divider
@@ -154,6 +182,7 @@ public class MoreInfo extends PortraitActivity {
         Runnable r = () -> {
             // Remove this, we will already have the store list
             storeLocations = gson.getNearbyStores(stores, userCoordinates);
+            mAdapter.replaceUserLocation(userCoordinates);
             mAdapter.replaceLocations(storeLocations);
             runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
             Log.i("hey i got urstores", "updateUserLocation: yo");
