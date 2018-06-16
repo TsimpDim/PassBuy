@@ -1,5 +1,6 @@
 package thedreamteam.passbuy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
 
 
     private GsonWorker gson = new GsonWorker();
+    private GsonFileWorker gsonfw = new GsonFileWorker();
     private List<Product> products = new ArrayList<>();
     private List<StorePrice> prices;
     private Basket basket = new Basket();
@@ -25,6 +27,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
     private Thread t = new Thread();
     private String searchedText;
     private int categoryId;
+    private Context mContext;
 
     private ImageButton homeScreen;
     private ImageButton backButton;
@@ -33,6 +36,8 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_results);
+
+        mContext = this.getBaseContext();
 
         searchButton = findViewById(R.id.search_button);
         searchText = findViewById(R.id.search_text);
@@ -165,6 +170,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                         mAdapter.replaceBasket(basket);
                         runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
                     }
+                    gsonfw.saveToFile(basket, mContext);
                 }
             }).start();
         }
