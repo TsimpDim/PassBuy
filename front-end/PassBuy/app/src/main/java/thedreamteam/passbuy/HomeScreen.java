@@ -24,6 +24,7 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
 
     private Basket basket = new Basket();
     private GsonWorker gson = new GsonWorker();
+    private GsonFileWorker gsonfw = new GsonFileWorker();
     private HomeScreenAdapter mAdapter = new HomeScreenAdapter(this, basket.getProducts(), basket.getQuantities(), basket);
     private List<Store> stores = new ArrayList<>();
     private String bestStore;
@@ -59,7 +60,11 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         Bundle bundle = intent.getBundleExtra("bundle");
         if (bundle != null) {
             basket = (Basket) bundle.getSerializable("basket");
+            gsonfw.saveToFile(basket, mContext);
         }
+        else
+            basket = gsonfw.loadFromFile(mContext);
+
 
         initRecyclerView();
         mAdapter.replaceList(basket);
@@ -138,6 +143,7 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
                     emptyBasketText.setText("Το καλάθι σου είναι άδειο :(");
                     bestSum.setText("-");
                     bestSupermarket.setText("");
+                    gsonfw.saveToFile(basket, mContext);
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreen.this);
@@ -226,6 +232,7 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
             mAdapter.notifyDataSetChanged();
             updateBestSum();
         }
+        gsonfw.saveToFile(basket, mContext);
     }
 
 
