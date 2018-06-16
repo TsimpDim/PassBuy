@@ -117,6 +117,10 @@ public class GsonWorker {
     public List<StoreLocation> getNearbyStores(List<Store> stores, Coordinates userCoordinates) {
         List<StoreLocation> locations = new ArrayList<>();
 
+        // Return empty if stores are null
+        if (stores == null)
+           return locations;
+
         // Iterate over all store chains
         for (Store store : stores) {
             StoreLocation storeLocation;
@@ -148,7 +152,8 @@ public class GsonWorker {
                     storeLocation.setStoreId(store.getId());
                     locations.add(storeLocation);
                 }
-            } else
+            }
+            else
                 return locations;
         }
         return locations;
@@ -164,7 +169,7 @@ public class GsonWorker {
         List<Product> products = null;
 
         // We need to encode greek letters
-        this.encode(searcharg);
+        searcharg = this.encode(searcharg);
 
         // Get JSON string
         json = this.getJSON("/products/search/" + searcharg);
@@ -280,7 +285,7 @@ public class GsonWorker {
         String line;
 
         // We have to encode the store name
-        this.encode(storeName);
+        storeName = this.encode(storeName);
 
         // Create a StringBuilder for the final URL
         StringBuilder finalURL = new StringBuilder();
