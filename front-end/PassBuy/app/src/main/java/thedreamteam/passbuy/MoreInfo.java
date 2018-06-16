@@ -7,18 +7,15 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,14 +29,6 @@ public class MoreInfo extends PortraitActivity {
     private List<StoreLocation> storeLocations = new ArrayList<>();
     private Coordinates userCoordinates = new Coordinates();
     private LocationManager locationManager;
-    private Basket basket;
-    private String bestStore;
-    private Double bestPrice;
-    private ImageButton homeScreen;
-    private ImageButton backButton;
-    private TextView bestPriceText;
-    private TextView bestSupermarket;
-
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -61,6 +50,13 @@ public class MoreInfo extends PortraitActivity {
             // todo?
         }
     };
+    private Basket basket;
+    private String bestStore;
+    private Double bestPrice;
+    private ImageButton homeScreen;
+    private ImageButton backButton;
+    private TextView bestPriceText;
+    private TextView bestSupermarket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +67,14 @@ public class MoreInfo extends PortraitActivity {
         homeScreen = findViewById(R.id.homeButton);
 
 
-
         //get basket from previous activity
         Bundle bundle = getIntent().getBundleExtra("bundle");
         basket = (Basket) bundle.getSerializable("basket");
-        bestPrice = (Double) bundle.getDouble("best_price");
+        bestPrice = bundle.getDouble("best_price");
         bestStore = (String) bundle.getCharSequence("best_super");
         stores = (List<Store>) bundle.getSerializable("stores");
 
         Collections.sort(basket.getTotalPrices(), new IdsComparator());
-
 
         bestPriceText = findViewById(R.id.best_price);
         bestSupermarket = findViewById(R.id.best_supermarket);
@@ -91,18 +85,16 @@ public class MoreInfo extends PortraitActivity {
         bestSupermarket.setSelected(true);
         bestPriceText.setSelected(true);
 
+        initRecyclerView();
 
         // Acquire user location
         if (Build.VERSION.SDK_INT > 23) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             else
-            {this.requestLocation();}
+                this.requestLocation();
         } else
-        {this.requestLocation(); }
-
-
-        initRecyclerView();
+            this.requestLocation();
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
@@ -123,11 +115,7 @@ public class MoreInfo extends PortraitActivity {
 
             startActivity(intent);
         });
-
-
     }
-
-
 
 
     @Override
@@ -156,16 +144,16 @@ public class MoreInfo extends PortraitActivity {
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener, null);
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
 
-       RecyclerView mRecyclerView;
-       mRecyclerView = findViewById(R.id.rv);
+        RecyclerView mRecyclerView;
+        mRecyclerView = findViewById(R.id.rv);
 
         // Layout size remains fixed, improve performance
         mRecyclerView.setHasFixedSize(true);
 
         // Use an adapter to feed data into the RecyclerView
-        mAdapter = new MoreInfoAdapter(this, basket,stores, storeLocations, userCoordinates);
+        mAdapter = new MoreInfoAdapter(this, basket, stores);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Draw line divider
@@ -178,28 +166,19 @@ public class MoreInfo extends PortraitActivity {
         userCoordinates.setLng(location.getLongitude());
         locationManager.removeUpdates(mLocationListener);
 
-        // Demo
-        Runnable r = () -> {
-            // Remove this, we will already have the store list
+        new Thread(() -> {
             storeLocations = gson.getNearbyStores(stores, userCoordinates);
             mAdapter.replaceUserLocation(userCoordinates);
             mAdapter.replaceLocations(storeLocations);
             runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
-            Log.i("hey i got urstores", "updateUserLocation: yo");
-        };
-
-        Thread t = new Thread(r);
-        t.start();}
-        }
+        }).start();
+    }
+}
 
 
 //Comparator that compares prices
-//THIS SHOULD CHANGE WITH JAVA 8 WAY
 class IdsComparator implements Comparator {
     public int compare(Object o1, Object o2) {
-        //Store s1=(Store)o1;
-        //Price s2=(Price)o2;
-
         if (((StorePrice) o1).getStoreId() == ((StorePrice) o2).getStoreId())
             return 0;
         else if (((StorePrice) o1).getStoreId() > ((StorePrice) o2).getStoreId())

@@ -19,18 +19,16 @@ import java.util.Locale;
 
 public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHolder> {
 
-    private List<Store> stores = new ArrayList<>();
+    private List<Store> stores;
     private Coordinates userCoordinates;
-    private Basket basket = new Basket();
+    private Basket basket;
     private List<StoreLocation> storeLocations = new ArrayList<>();
     private Context mContext;
 
-    public MoreInfoAdapter(Context mContext, Basket basket, List<Store> stores, List<StoreLocation> storeLocations, Coordinates co) {
+    public MoreInfoAdapter(Context mContext, Basket basket, List<Store> stores) {
         this.mContext = mContext;
         this.basket = basket;
         this.stores = stores;
-        this.storeLocations = storeLocations;
-        this.userCoordinates = co;
     }
 
     @Override
