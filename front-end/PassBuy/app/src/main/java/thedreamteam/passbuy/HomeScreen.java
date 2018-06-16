@@ -197,15 +197,17 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         //Get Store names
         new Thread(() -> {
             stores = gson.getStores();
-            bestStore = stores.get(0).getName();
-            //Get best store name
-            for (Store store : stores) {
-                if (totalPrices.get(0).getStoreId() == store.getId()) {
-                    bestStore = store.getName();
+            if (stores != null) {
+                bestStore = stores.get(0).getName();
+                //Get best store name
+                for (Store store : stores) {
+                    if (totalPrices.get(0).getStoreId() == store.getId()) {
+                        bestStore = store.getName();
+                    }
                 }
+                //run on UI thread cause its a TextView
+                runOnUiThread(() -> bestSupermarket.setText(bestStore));
             }
-            //run on UI thread cause its a TextView
-            runOnUiThread(() -> bestSupermarket.setText(bestStore));
         }).start();
 
 
