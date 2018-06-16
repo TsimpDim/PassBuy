@@ -10,18 +10,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class BasketInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BasketInfoAdapter extends RecyclerView.Adapter<BasketInfoAdapter.ViewHolder> {
 
-    private List<String> mItemNames;
-    private List<String> mItemPrices;
-    private List<String> mItemQ;
+    private List<Product> products;
+    private List<Integer> quantities;
+    private int store_id;
     private Context mContext;
 
 
-    public BasketInfoAdapter(Context mContext, List<String> mItemNames, List<String> mItemQ, List<String> mItemPrices) {
-        this.mItemNames = mItemNames;
-        this.mItemPrices = mItemPrices;
-        this.mItemQ = mItemQ;
+    public BasketInfoAdapter(Context mContext, List<Product> products, List<Integer> quantities, int store_id) {
+        this.products = products;
+        this.quantities = quantities;
+        this.store_id = store_id;
         this.mContext = mContext;
     }
 
@@ -32,28 +32,30 @@ public class BasketInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        //todo
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.item_name.setSelected(true);
+        holder.item_q.setText(String.valueOf(quantities.get(position)));
+        holder.item_name.setText(products.get(position).getName());
+        holder.item_price.setText(String.format("%.2f €", products.get(position).getPrices().get(store_id).getPrice()));
     }
 
-    @Override
-    public int getItemCount() {
-        return 10;
-    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView item_price;
-        TextView item_name;
-        TextView item_q;
-        ConstraintLayout parent_layout;
+        @Override
+        public int getItemCount () {
+            return products.size();
+        }
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            item_price = itemView.findViewById(R.id.item_price);
-            item_name = itemView.findViewById(R.id.item_name);
-            item_q = itemView.findViewById(R.id.item_q);
-            parent_layout = itemView.findViewById(R.id.parent_layout2);
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView item_price;
+            TextView item_name;
+            TextView item_q;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                item_price = itemView.findViewById(R.id.item_price);
+                item_name = itemView.findViewById(R.id.item_name);
+                item_q = itemView.findViewById(R.id.item_q);
+            }
         }
     }
-}
 

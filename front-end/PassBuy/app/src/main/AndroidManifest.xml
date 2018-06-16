@@ -27,6 +27,7 @@
         <activity android:name=".CategoriesSearchPage"></activity>
         <activity android:name=".SearchResults"></activity>
         <activity android:name=".MoreInfo"></activity>
+        <activity android:name=".BasketInfo"></activity>
 
     </application>
 
