@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +51,7 @@ public class MoreInfo extends PortraitActivity {
             // todo?
         }
     };
+    private Context mContext;
     private Basket basket;
     private String bestStore;
     private Double bestPrice;
@@ -62,6 +64,7 @@ public class MoreInfo extends PortraitActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.more_info);
+        mContext = this.getBaseContext();
 
         backButton = findViewById(R.id.backButton);
         homeScreen = findViewById(R.id.homeButton);
@@ -74,27 +77,43 @@ public class MoreInfo extends PortraitActivity {
         bestStore = (String) bundle.getCharSequence("best_super");
         stores = (List<Store>) bundle.getSerializable("stores");
 
-        Collections.sort(basket.getTotalPrices(), new IdsComparator());
+        List<StorePrice> totalPrices = basket.getTotalPrices();
 
-        bestPriceText = findViewById(R.id.best_price);
-        bestSupermarket = findViewById(R.id.best_supermarket);
+        new Thread(() -> {
+            if (stores == null && isNetworkAvailable(mContext)) {
+                stores = gson.getStores();
+                bestStore = stores.get(0).getName();
+                //Get best store name
+                for (Store store : stores) {
+                    if (totalPrices.get(0).getStoreId().equals(store.getId())) {
+                        bestStore = store.getName();
+                        break;
+                    }
+                }
+            }
+            Collections.sort(totalPrices, new IdsComparator());
 
-        bestPriceText.setText(String.format("%.2f €", bestPrice));
-        bestSupermarket.setText(bestStore);
+            bestPriceText = findViewById(R.id.best_price);
+            bestSupermarket = findViewById(R.id.best_supermarket);
 
-        bestSupermarket.setSelected(true);
-        bestPriceText.setSelected(true);
+            runOnUiThread(() -> {
+                bestPriceText.setText(String.format("%.2f €", bestPrice));
+                bestSupermarket.setText(bestStore);
 
-        initRecyclerView();
+                bestSupermarket.setSelected(true);
+                bestPriceText.setSelected(true);
+                initRecyclerView();
 
-        // Acquire user location
-        if (Build.VERSION.SDK_INT > 23) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            else
-                this.requestLocation();
-        } else
-            this.requestLocation();
+                // Acquire user location
+                if (Build.VERSION.SDK_INT > 23) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    else
+                        this.requestLocation();
+                } else
+                    this.requestLocation();
+            });
+        }).start();
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
@@ -146,19 +165,18 @@ public class MoreInfo extends PortraitActivity {
 
     private void initRecyclerView() {
 
-        RecyclerView mRecyclerView;
-        mRecyclerView = findViewById(R.id.rv);
-
-        // Layout size remains fixed, improve performance
-        mRecyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = findViewById(R.id.rv);
 
         // Use an adapter to feed data into the RecyclerView
         mAdapter = new MoreInfoAdapter(this, basket, stores);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Layout size remains fixed, improve performance
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Draw line divider
         DividerItemDecoration lineDivider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        mRecyclerView.addItemDecoration(lineDivider);
+        recyclerView.addItemDecoration(lineDivider);
     }
 
     public void updateUserLocation(Location location) {
@@ -170,11 +188,16 @@ public class MoreInfo extends PortraitActivity {
             storeLocations = gson.getNearbyStores(stores, userCoordinates);
             mAdapter.replaceUserLocation(userCoordinates);
             mAdapter.replaceLocations(storeLocations);
-            runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+            runOnUiThread(() -> mAdapter.notifyDataSetChanged());
         }).start();
     }
-}
 
+
+    public boolean isNetworkAvailable(Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+}
 
 //Comparator that compares prices
 class IdsComparator implements Comparator {

@@ -95,39 +95,20 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         });
 
 
-        moreInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(!basket.getProducts().isEmpty()) {
-
-                    if(stores!=null){
-                        if(stores.isEmpty()){
-                            new Thread(() -> {
-                                stores = gson.getStores();
-                            }).start();
-                        }
-                    }
-
-
-
-                    Intent intent =  new Intent(v.getContext() , MoreInfo.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("basket", basket);
-                    bundle.putSerializable("stores", (Serializable) stores);
-                    bundle.putCharSequence("best_super",bestStore);
-                    bundle.putDouble("best_price",bestPrice);
-                    intent.putExtra("bundle", bundle);
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(v.getContext(), "Το καλάθι σου είναι άδειο. Πρόσθεσε προϊόντα.", Toast.LENGTH_SHORT).show();
-                }
+        moreInfoButton.setOnClickListener(v -> {
+            if(!basket.getProducts().isEmpty()) {
+                Intent intent12 =  new Intent(v.getContext() , MoreInfo.class);
+                Bundle bundle12 = new Bundle();
+                bundle12.putSerializable("basket", basket);
+                bundle12.putSerializable("stores", (Serializable) stores);
+                bundle12.putCharSequence("best_super",bestStore);
+                bundle12.putDouble("best_price",bestPrice);
+                intent12.putExtra("bundle", bundle12);
+                startActivity(intent12);
             }
+            else
+                Toast.makeText(v.getContext(), "Το καλάθι σου είναι άδειο. Πρόσθεσε προϊόντα.", Toast.LENGTH_SHORT).show();
         });
-
-
-
 
         //Delete Button Functions Onclick
         deleteButton.setOnClickListener(view -> {
