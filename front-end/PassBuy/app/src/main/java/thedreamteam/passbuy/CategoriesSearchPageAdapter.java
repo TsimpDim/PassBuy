@@ -66,6 +66,7 @@ public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<Categories
         public ViewHolder(View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category_name);
+            category.setSelected(true);
             go_to = itemView.findViewById(R.id.next_arrow_button);
             parent_layout = itemView.findViewById(R.id.parent_layout3);
         }
