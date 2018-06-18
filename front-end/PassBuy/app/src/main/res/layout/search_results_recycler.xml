@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="253dp"
-        android:layout_height="26dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
         android:text="Πορτοκάλια Ημαθίας"
         android:textColor="#000000"
         android:textSize="19sp"
         app:fontFamily="@font/roboto"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -58,19 +58,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/orange" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="164dp"
-        android:layout_height="6dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/grey_line" />
 
 </android.support.constraint.ConstraintLayout>
