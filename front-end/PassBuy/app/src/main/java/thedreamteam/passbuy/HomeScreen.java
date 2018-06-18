@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,9 +129,16 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreen.this);
-            builder.setMessage("Θέλεις να διαγραφεί το υπάρχων καλάθι?").setPositiveButton("ΔΙΑΓΡΑΦΗ", dialogClickListener)
+            builder.setMessage("Θέλεις να διαγραφεί το υπάρχων καλάθι;").setPositiveButton("ΔΙΑΓΡΑΦΗ", dialogClickListener)
                     .setNegativeButton("ΑΚΥΡΟ", dialogClickListener).show();
         });
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        this.finishAffinity();
     }
 
 
