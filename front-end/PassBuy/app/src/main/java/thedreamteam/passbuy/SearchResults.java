@@ -3,8 +3,10 @@ package thedreamteam.passbuy;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -95,10 +97,10 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
         });
     }
 
+    @Override
     public void onBackPressed() {
         backButton.performClick();
     }
-
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_searched_items);
@@ -109,6 +111,9 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        DividerItemDecoration lineDivider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(lineDivider);
     }
 
     private void getProductsByName() {
@@ -121,6 +126,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                 runOnUiThread(new Thread(() -> Toast.makeText(getApplicationContext(),
                         "Δεν υπάρχει προϊόν με αυτή την ονομασία.",
                         Toast.LENGTH_LONG).show()));
+                runOnUiThread(this::onBackPressed);
             }
         };
 
@@ -142,6 +148,7 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                 runOnUiThread(new Thread(() -> Toast.makeText(getApplicationContext(),
                         "Δεν λάβαμε τα προϊόντα της κατηγορίας. Ελέγξτε τη σύνδεσή σας.",
                         Toast.LENGTH_LONG).show()));
+                runOnUiThread(this::onBackPressed);
             }
         };
 
