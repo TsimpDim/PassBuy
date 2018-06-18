@@ -31,6 +31,8 @@ public class PopupQuantityDialog extends DialogFragment {
 
         // Set transparent background
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
 
 
         Basket basket = (Basket) getArguments().getSerializable("basket");
@@ -41,6 +43,8 @@ public class PopupQuantityDialog extends DialogFragment {
         count.setText(String.valueOf(quantity));
 
         TextView itemName = view.findViewById(R.id.item_name);
+        itemName.setSelected(true);
+
         TextView description = view.findViewById(R.id.prodDesc);
         ImageButton plus = view.findViewById(R.id.plus);
         ImageButton minus = view.findViewById(R.id.minusButton);
