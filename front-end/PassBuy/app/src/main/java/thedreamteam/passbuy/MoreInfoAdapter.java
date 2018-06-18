@@ -40,15 +40,17 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if(!storeLocations.isEmpty()){
+            Integer storeId = basket.getTotalPrices().get(position).getStoreId()-1;
             holder.name.setFocusable(true);
             holder.name.setSelected(true);
             holder.total.setFocusable(true);
             holder.total.setSelected(true);
             holder.area.setFocusable(true);
             holder.area.setSelected(true);
-            holder.name.setText(stores.get(storeLocations.get(position).getStoreId()-1).getName());
+            holder.name.setText(stores.get(storeId).getName());
             holder.area.setText(storeLocations.get(position).getVicinity());
-            holder.total.setText(String.format("%.2f €", basket.getTotalPrices().get(storeLocations.get(position).getStoreId()-1).getPrice()));
+
+            holder.total.setText(String.format("%.2f €", basket.getTotalPrices().get(storeId).getPrice()));
         }
 
         holder.infoButton.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +59,10 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
 
                 Intent intent =  new Intent(mContext , BasketInfo.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("basket",basket);
+                bundle.putSerializable("basket", basket);
                 //bundle.putSerializable("products",(Serializable) basket.getProducts());
                 //bundle.putSerializable("quantities",(Serializable) basket.getQuantities());
-                bundle.putInt("store_id",storeLocations.get(position).getStoreId());
+                bundle.putInt("store_id",storeLocations.get(position).getStoreId() - 1);
                 bundle.putSerializable("userCo", userCoordinates);
                 bundle.putSerializable("storeLoc", storeLocations.get(position));
                 intent.putExtra("bundle", bundle);
@@ -113,11 +115,11 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public TextView area;
-        public TextView total;
-        public Button infoButton;
-        public Button mapsButton;
+        TextView name;
+        TextView area;
+        TextView total;
+        Button infoButton;
+        Button mapsButton;
 
         //TODO: Speed up rendering by reducing findViewById calls
 

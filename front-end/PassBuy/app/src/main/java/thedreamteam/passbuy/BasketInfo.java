@@ -46,10 +46,9 @@ public class BasketInfo extends PortraitActivity {
         //quantities = (List<Integer>) bundle.getSerializable("quantities");
         userCoordinates = (Coordinates) bundle.getSerializable("userCo");
         storeLoc = (StoreLocation) bundle.getSerializable("storeLoc");
-        store_id = bundle.getInt(" store_id");
+        store_id = bundle.getInt("store_id");
         products = basket.getProducts();
         quantities = basket.getQuantities();
-
 
         initRecyclerView();
 
@@ -93,7 +92,7 @@ public class BasketInfo extends PortraitActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view22);
 
         recyclerView.setHasFixedSize(true);
-        BasketInfoAdapter adapter = new BasketInfoAdapter(this, products, quantities,store_id);
+        BasketInfoAdapter adapter = new BasketInfoAdapter(this, products, quantities, store_id);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }

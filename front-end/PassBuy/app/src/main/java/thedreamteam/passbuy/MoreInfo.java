@@ -59,6 +59,7 @@ public class MoreInfo extends PortraitActivity {
     private ImageButton backButton;
     private TextView bestPriceText;
     private TextView bestSupermarket;
+    private TextView loadingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class MoreInfo extends PortraitActivity {
 
         backButton = findViewById(R.id.backButton);
         homeScreen = findViewById(R.id.homeButton);
+        loadingText = findViewById(R.id.empty_basket_text);
 
 
         //get basket from previous activity
@@ -97,6 +99,8 @@ public class MoreInfo extends PortraitActivity {
             bestSupermarket = findViewById(R.id.best_supermarket);
 
             runOnUiThread(() -> {
+                loadingText.setText("Λαμβάνουμε την τοποθεσία σας μέσω GPS.\nΠαρακαλώ περιμένετε..."
+                + "\n\nΣημείωση: Οι ρυθμίσεις σας θα πρέπει να επιτρέπουν την ανάκτηση τοποθεσίας μέσω GPS.");
                 bestPriceText.setText(String.format("%.2f €", bestPrice));
                 bestSupermarket.setText(bestStore);
 
@@ -105,7 +109,7 @@ public class MoreInfo extends PortraitActivity {
                 initRecyclerView();
 
                 // Acquire user location
-                if (Build.VERSION.SDK_INT > 23) {
+                if (Build.VERSION.SDK_INT >= 23) {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     else
@@ -135,7 +139,6 @@ public class MoreInfo extends PortraitActivity {
             startActivity(intent);
         });
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -184,11 +187,16 @@ public class MoreInfo extends PortraitActivity {
         userCoordinates.setLng(location.getLongitude());
         locationManager.removeUpdates(mLocationListener);
 
+        loadingText.setText("Ψάχνουμε τα κοντινότερα καταστήματα...");
+
         new Thread(() -> {
             storeLocations = gson.getNearbyStores(stores, userCoordinates);
             mAdapter.replaceUserLocation(userCoordinates);
             mAdapter.replaceLocations(storeLocations);
-            runOnUiThread(() -> mAdapter.notifyDataSetChanged());
+            runOnUiThread(() -> {
+                mAdapter.notifyDataSetChanged();
+                loadingText.setText("");
+            });
         }).start();
     }
 

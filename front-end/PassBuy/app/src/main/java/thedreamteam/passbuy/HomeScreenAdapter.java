@@ -71,7 +71,7 @@ public class HomeScreenAdapter extends RecyclerView.Adapter<HomeScreenAdapter.Vi
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setMessage("Θέλεις να διαγραφεί το υπάρχων καλάθι?").setPositiveButton("ΔΙΑΓΡΑΦΗ", dialogClickListener)
+            builder.setMessage("Θέλεις να διαγραφεί το προϊόν;").setPositiveButton("ΔΙΑΓΡΑΦΗ", dialogClickListener)
                     .setNegativeButton("ΑΚΥΡΟ", dialogClickListener).show();
         });
     }

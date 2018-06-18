@@ -18,18 +18,22 @@
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="17dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
         android:text="Πορτοκάλια Ημαθίας"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
         app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/prodImage"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.173" />
@@ -65,7 +69,6 @@
         android:id="@+id/prodDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
@@ -73,7 +76,6 @@
         android:textAlignment="viewStart"
         android:textSize="13sp"
         app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toTopOf="@+id/quantity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,15 +132,15 @@
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="39dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="@color/colorTextBold"
         android:textSize="53sp"
         app:fontFamily="@font/roboto"
         app:layout_constraintEnd_toStartOf="@+id/plus"
-        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toEndOf="@+id/minusButton"
         app:layout_constraintTop_toBottomOf="@+id/quantity" />
 
@@ -149,24 +151,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/count"
         app:srcCompat="@drawable/small_divider" />
-
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:text="Κάθε τεμάχιο αντιστοιχεί σε \n500 γραμμάρια προιόντος"
-        android:textSize="13sp"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toTopOf="@+id/cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/smallDivider" />
 
     <Button
         android:id="@+id/cancel"
@@ -174,6 +161,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
@@ -182,7 +170,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add"
         app:layout_constraintHorizontal_bias="0.96"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/smallDivider"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/add"
@@ -197,6 +187,7 @@
         app:fontFamily="@font/roboto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cancel" />
+        app:layout_constraintTop_toTopOf="@+id/cancel"
+        app:layout_constraintVertical_bias="0.111" />
 
 </android.support.constraint.ConstraintLayout>

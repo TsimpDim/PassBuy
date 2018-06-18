@@ -14,11 +14,11 @@ public class BasketInfoAdapter extends RecyclerView.Adapter<BasketInfoAdapter.Vi
 
     private List<Product> products;
     private List<Integer> quantities;
-    private int store_id;
+    private Integer store_id;
     private Context mContext;
 
 
-    public BasketInfoAdapter(Context mContext, List<Product> products, List<Integer> quantities, int store_id) {
+    public BasketInfoAdapter(Context mContext, List<Product> products, List<Integer> quantities, Integer store_id) {
         this.products = products;
         this.quantities = quantities;
         this.store_id = store_id;
@@ -36,7 +36,7 @@ public class BasketInfoAdapter extends RecyclerView.Adapter<BasketInfoAdapter.Vi
         holder.item_name.setSelected(true);
         holder.item_q.setText(String.valueOf(quantities.get(position)));
         holder.item_name.setText(products.get(position).getName());
-        holder.item_price.setText(String.format("%.2f €", products.get(position).getPrices().get(store_id).getPrice()));
+        holder.item_price.setText(String.format("%.2f €", products.get(position).getPrices().get(store_id).getPrice() * quantities.get(position)));
     }
 
 
