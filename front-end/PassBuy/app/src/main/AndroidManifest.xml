@@ -13,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -25,14 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CategoriesSearchPage"></activity>
-        <activity android:name=".SearchResults"></activity>
-        <activity android:name=".MoreInfo"></activity>
-        <activity android:name=".BasketInfo"></activity>
+        <activity android:name=".CategoriesSearchPage" />
+        <activity android:name=".SearchResults" />
+        <activity android:name=".MoreInfo" />
+        <activity android:name=".BasketInfo" />
 
     </application>
-
-
-
-
 </manifest>
