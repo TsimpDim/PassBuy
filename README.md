@@ -4,7 +4,9 @@
 
 Built by a team of students for a school project, PassBuy enables the user to find the cheapest price for his shopping list in quick and easy steps.
 
+# Running the application
 
+To run it locally you need to have a key for the Google Places A
 
 ## Back-end
 
