@@ -23,13 +23,21 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MoreInfo extends PortraitActivity {
-
+    
+    private static final String BUNDLE_NAME = "bundle";
+    private static final String BASKET_NAME = "basket";
     private MoreInfoAdapter mAdapter;
     private GsonWorker gson = new GsonWorker();
     private List<Store> stores = new ArrayList<>();
     private List<StoreLocation> storeLocations = new ArrayList<>();
     private Coordinates userCoordinates = new Coordinates();
     private LocationManager locationManager;
+    private Basket basket;
+    private String bestStore;
+    private double bestPrice;
+    private TextView bestPriceText;
+    private TextView bestSupermarket;
+    private TextView loadingText;
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -38,43 +46,33 @@ public class MoreInfo extends PortraitActivity {
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-
+            // Unneeded
         }
 
         @Override
         public void onProviderEnabled(String s) {
-            // todo?
+            // Unneeded
         }
 
         @Override
         public void onProviderDisabled(String s) {
-            // todo?
+            // Unneeded
         }
     };
-    private Context mContext;
-    private Basket basket;
-    private String bestStore;
-    private Double bestPrice;
-    private ImageButton homeScreen;
-    private ImageButton backButton;
-    private TextView bestPriceText;
-    private TextView bestSupermarket;
-    private TextView loadingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.more_info);
-        mContext = this.getBaseContext();
+        Context mContext = this.getBaseContext();
 
-        backButton = findViewById(R.id.backButton);
-        homeScreen = findViewById(R.id.homeButton);
+        ImageButton backButton = findViewById(R.id.backButton);
+        ImageButton homeScreen = findViewById(R.id.homeButton);
         loadingText = findViewById(R.id.empty_basket_text);
 
-
         //get basket from previous activity
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        basket = (Basket) bundle.getSerializable("basket");
+        Bundle bundle = getIntent().getBundleExtra(BUNDLE_NAME);
+        basket = (Basket) bundle.getSerializable(BASKET_NAME);
         bestPrice = bundle.getDouble("best_price");
         bestStore = (String) bundle.getCharSequence("best_super");
         stores = (List<Store>) bundle.getSerializable("stores");
@@ -100,7 +98,7 @@ public class MoreInfo extends PortraitActivity {
 
             runOnUiThread(() -> {
                 loadingText.setText("Λαμβάνουμε την τοποθεσία σας μέσω GPS.\nΠαρακαλώ περιμένετε..."
-                + "\n\nΣημείωση: Οι ρυθμίσεις σας θα πρέπει να επιτρέπουν την ανάκτηση τοποθεσίας μέσω GPS.");
+                        + "\n\nΣημείωση: Οι ρυθμίσεις σας θα πρέπει να επιτρέπουν την ανάκτηση τοποθεσίας μέσω GPS.");
                 bestPriceText.setText(String.format("%.2f €", bestPrice));
                 bestSupermarket.setText(bestStore);
 
@@ -109,13 +107,7 @@ public class MoreInfo extends PortraitActivity {
                 initRecyclerView();
 
                 // Acquire user location
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    else
-                        this.requestLocation();
-                } else
-                    this.requestLocation();
+                this.requestPermissions();
             });
         }).start();
 
@@ -123,8 +115,8 @@ public class MoreInfo extends PortraitActivity {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
 
             Bundle bundle2 = new Bundle();
-            bundle2.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle2);
+            bundle2.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle2);
 
             startActivity(intent);
         });
@@ -133,11 +125,21 @@ public class MoreInfo extends PortraitActivity {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
 
             Bundle bundle12 = new Bundle();
-            bundle12.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle12);
+            bundle12.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle12);
 
             startActivity(intent);
         });
+    }
+
+    public void requestPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            else
+                this.requestLocation();
+        } else
+            this.requestLocation();
     }
 
     @Override
@@ -199,7 +201,6 @@ public class MoreInfo extends PortraitActivity {
             });
         }).start();
     }
-
 
     public boolean isNetworkAvailable(Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
