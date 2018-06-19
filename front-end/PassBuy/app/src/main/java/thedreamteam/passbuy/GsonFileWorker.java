@@ -23,11 +23,13 @@ public class GsonFileWorker {
             outputStream.write(json.getBytes());
             outputStream.close();
         } catch (Exception e) {
+            // Can't occur
+            return;
         }
     }
 
     public Basket loadFromFile(Context mContext) {
-        Basket basket = new Basket();
+        Basket basket;
         FileInputStream fis;
 
         try {
@@ -45,6 +47,9 @@ public class GsonFileWorker {
             String json = sb.toString();
             basket = gson.fromJson(json, Basket.class);
         } catch (Exception e) {
+            // Something has gone horribly wrong if this occurs
+            // Return an empty Basket
+            return new Basket();
         }
         return basket;
     }

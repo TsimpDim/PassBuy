@@ -13,32 +13,27 @@ import java.util.List;
 
 public class CategoriesSearchPage extends PortraitActivity {
 
-
+    private static final String BUNDLE_NAME = "bundle";
+    private static final String BASKET_NAME = "basket";
     private List<Category> categoryNames = new ArrayList<>();
     private Basket basket = new Basket();
     private GsonWorker gson = new GsonWorker();
-
     private CategoriesSearchPageAdapter mAdapter;
-    private TextView searchText;
-    private ImageButton searchButton;
     private ImageButton backButton;
-    private ImageButton homeScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.categories_search_page);
 
-        searchText = findViewById(R.id.search_text);
-        searchButton = findViewById(R.id.search_button);
+        TextView searchText = findViewById(R.id.search_text);
+        ImageButton searchButton = findViewById(R.id.search_button);
+        ImageButton homeScreen = findViewById(R.id.homeButton);
         backButton = findViewById(R.id.backButton);
-        homeScreen = findViewById(R.id.homeButton);
-
 
         //get basket from previous activity
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        basket = (Basket) bundle.getSerializable("basket");
-
+        Bundle bundle = getIntent().getBundleExtra(BUNDLE_NAME);
+        basket = (Basket) bundle.getSerializable(BASKET_NAME);
 
         initRecyclerView();
 
@@ -47,20 +42,18 @@ public class CategoriesSearchPage extends PortraitActivity {
 
             if (categoryNames != null) {
                 mAdapter.replaceList(categoryNames);
-                runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                runOnUiThread((mAdapter::notifyDataSetChanged));
             }
         }).start();
 
-
         searchButton.setOnClickListener(v -> {
-
             Intent intent = new Intent(v.getContext(), SearchResults.class);
 
             Bundle bundle1 = new Bundle();
-            bundle1.putSerializable("basket", basket);
+            bundle1.putSerializable(BASKET_NAME, basket);
             bundle1.putCharSequence("search_text", searchText.getText().toString());
             bundle1.putInt("category_id", -1);
-            intent.putExtra("bundle", bundle1);
+            intent.putExtra(BUNDLE_NAME, bundle1);
 
             startActivity(intent);
         });
@@ -69,8 +62,18 @@ public class CategoriesSearchPage extends PortraitActivity {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
 
             Bundle bundle12 = new Bundle();
-            bundle12.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle12);
+            bundle12.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle12);
+
+            startActivity(intent);
+        });
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), HomeScreen.class);
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle2);
 
             startActivity(intent);
         });
@@ -82,18 +85,9 @@ public class CategoriesSearchPage extends PortraitActivity {
             }
             return false;
         });
-
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), HomeScreen.class);
-
-            Bundle bundle2 = new Bundle();
-            bundle2.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle2);
-
-            startActivity(intent);
-        });
     }
 
+    @Override
     public void onBackPressed() {
         backButton.performClick();
     }

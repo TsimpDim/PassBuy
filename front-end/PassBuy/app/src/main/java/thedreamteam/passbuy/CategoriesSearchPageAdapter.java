@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,23 +29,26 @@ public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<Categories
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_search_page_recycler, parent, false);
-        return new ViewHolder(view);
-    }
+        final ViewHolder holder = new ViewHolder(view);
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.category.setText(mCategoriesNames.get(position).getName());
-        holder.go_to.setOnClickListener(v -> {
+        view.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, SearchResults.class);
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("basket", basket);
             bundle.putCharSequence("search_text", "");
-            bundle.putInt("category_id", mCategoriesNames.get(position).getCategoryId());
+            bundle.putInt("category_id", mCategoriesNames.get(holder.getAdapterPosition()).getCategoryId());
             intent.putExtra("bundle", bundle);
 
             mContext.startActivity(intent);
         });
+
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.category.setText(mCategoriesNames.get(position).getName());
     }
 
     @Override
@@ -60,15 +63,15 @@ public class CategoriesSearchPageAdapter extends RecyclerView.Adapter<Categories
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView category;
-        ImageButton go_to;
-        ConstraintLayout parent_layout;
+        ImageView goTo;
+        ConstraintLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category_name);
             category.setSelected(true);
-            go_to = itemView.findViewById(R.id.next_arrow_button);
-            parent_layout = itemView.findViewById(R.id.parent_layout3);
+            goTo = itemView.findViewById(R.id.next_arrow);
+            parentLayout = itemView.findViewById(R.id.parent_layout3);
         }
     }
 }

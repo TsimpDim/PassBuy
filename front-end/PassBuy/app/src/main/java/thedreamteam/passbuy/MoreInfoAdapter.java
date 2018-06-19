@@ -9,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -33,14 +31,36 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.more_info_recycler, parent, false);
-        return new ViewHolder(v);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.more_info_recycler, parent, false);
+        final ViewHolder holder = new ViewHolder(view);
+
+        holder.infoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, BasketInfo.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("basket", basket);
+            bundle.putInt("store_id", storeLocations.get(holder.getAdapterPosition()).getStoreId() - 1);
+            bundle.putSerializable("userCo", userCoordinates);
+            bundle.putSerializable("storeLoc", storeLocations.get(holder.getAdapterPosition()));
+            intent.putExtra("bundle", bundle);
+            mContext.startActivity(intent);
+        });
+
+        holder.mapsButton.setOnClickListener(v -> {
+            String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f",
+                    storeLocations.get(holder.getAdapterPosition()).getLat(),
+                    storeLocations.get(holder.getAdapterPosition()).getLng());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            intent.setPackage("com.google.android.apps.maps");
+            mContext.startActivity(intent);
+        });
+
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if(!storeLocations.isEmpty()){
-            Integer storeId = basket.getTotalPrices().get(position).getStoreId()-1;
+        if (!storeLocations.isEmpty()) {
+            Integer storeId = basket.getTotalPrices().get(position).getStoreId() - 1;
             holder.name.setFocusable(true);
             holder.name.setSelected(true);
             holder.total.setFocusable(true);
@@ -52,35 +72,6 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
 
             holder.total.setText(String.format("%.2f €", basket.getTotalPrices().get(storeId).getPrice()));
         }
-
-        holder.infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-
-                Intent intent =  new Intent(mContext , BasketInfo.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("basket", basket);
-                //bundle.putSerializable("products",(Serializable) basket.getProducts());
-                //bundle.putSerializable("quantities",(Serializable) basket.getQuantities());
-                bundle.putInt("store_id",storeLocations.get(position).getStoreId() - 1);
-                bundle.putSerializable("userCo", userCoordinates);
-                bundle.putSerializable("storeLoc", storeLocations.get(position));
-                intent.putExtra("bundle", bundle);
-                mContext.startActivity(intent);
-
-            }
-        });
-
-        holder.mapsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f", storeLocations.get(position).getLat(), storeLocations.get(position).getLng());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                intent.setPackage("com.google.android.apps.maps");
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -96,21 +87,21 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
 
     }
 
-    public void replaceUserLocation(Coordinates co){
-        this.userCoordinates= co;
+    public void replaceUserLocation(Coordinates co) {
+        this.userCoordinates = co;
     }
 
-    public void replaceLocations(List<StoreLocation> storeLocations){
+    public void replaceLocations(List<StoreLocation> storeLocations) {
         this.storeLocations.clear();
         this.storeLocations.addAll(storeLocations);
     }
 
-    public void replaceTotalPrices(List<StorePrice> totalPrices){
+    public void replaceTotalPrices(List<StorePrice> totalPrices) {
         basket.getTotalPrices().clear();
         basket.getTotalPrices().addAll(totalPrices);
     }
 
-    public void replaceBasket(Basket basket){
+    public void replaceBasket(Basket basket) {
         this.basket = basket;
     }
 
@@ -120,8 +111,6 @@ public class MoreInfoAdapter extends RecyclerView.Adapter<MoreInfoAdapter.ViewHo
         TextView total;
         Button infoButton;
         Button mapsButton;
-
-        //TODO: Speed up rendering by reducing findViewById calls
 
         public ViewHolder(View itemView) {
             super(itemView);

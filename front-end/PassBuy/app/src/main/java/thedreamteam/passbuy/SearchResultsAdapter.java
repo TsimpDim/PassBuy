@@ -29,39 +29,41 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         this.mContext = mContext;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_results_recycler, parent, false);
-        return new ViewHolder(view);
+        final ViewHolder holder = new ViewHolder(view);
+
+        holder.addItem.setOnClickListener(v -> {
+            PopupQuantityDialog dialogFragment = new PopupQuantityDialog();
+
+            FragmentManager fm = ((Activity) mContext).getFragmentManager();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("product", products.get(holder.getAdapterPosition()));
+            bundle.putSerializable("basket", basket);
+            dialogFragment.setArguments(bundle);
+
+            dialogFragment.show(fm, "Sample Fragment");
+
+        });
+
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.item_name.setText(products.get(position).getName());
+        holder.itemName.setText(products.get(position).getName());
 
         if (!products.get(position).getImageUrl().isEmpty())
             Picasso.get().load(products.get(position).getImageUrl()).into(holder.image);
 
         if (!basket.getProducts().isEmpty()) {
             if (basket.getProducts().contains(products.get(position)))
-                holder.add_item.setPressed(true);
+                holder.addItem.setPressed(true);
             else
-                holder.add_item.setPressed(false);
+                holder.addItem.setPressed(false);
         }
-
-        holder.add_item.setOnClickListener(v -> {
-            PopupQuantityDialog dialogFragment = new PopupQuantityDialog();
-
-            FragmentManager fm = ((Activity) mContext).getFragmentManager();
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("product", products.get(position));
-            bundle.putSerializable("basket", basket);
-            dialogFragment.setArguments(bundle);
-            dialogFragment.show(fm, "Sample Fragment");
-
-        });
     }
 
     @Override
@@ -85,17 +87,17 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView item_name;
-        ImageButton add_item;
-        ConstraintLayout parent_layout;
+        TextView itemName;
+        ImageButton addItem;
+        ConstraintLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.imageView);
-            item_name = itemView.findViewById(R.id.textView);
-            item_name.setSelected(true);
-            add_item = itemView.findViewById(R.id.add_button);
-            parent_layout = itemView.findViewById(R.id.parent_layout2);
+            itemName = itemView.findViewById(R.id.textView);
+            itemName.setSelected(true);
+            addItem = itemView.findViewById(R.id.add_button);
+            parentLayout = itemView.findViewById(R.id.parent_layout2);
         }
     }
 }

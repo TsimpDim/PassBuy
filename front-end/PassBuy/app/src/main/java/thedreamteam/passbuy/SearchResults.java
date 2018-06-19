@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,21 +16,19 @@ import java.util.List;
 
 public class SearchResults extends PortraitActivity implements PopupQuantityDialog.DialogListener {
 
-
+    private static final String BUNDLE_NAME = "bundle";
+    private static final String BASKET_NAME = "basket";
     private GsonWorker gson = new GsonWorker();
     private GsonFileWorker gsonfw = new GsonFileWorker();
     private List<Product> products = new ArrayList<>();
     private List<StorePrice> prices;
     private Basket basket = new Basket();
     private SearchResultsAdapter mAdapter = new SearchResultsAdapter(this, products, basket);
-    private ImageButton searchButton;
     private EditText searchText;
     private Thread t = new Thread();
-    private String searchedText;
     private int categoryId;
     private Context mContext;
 
-    private ImageButton homeScreen;
     private ImageButton backButton;
 
     @Override
@@ -41,19 +38,17 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
 
         mContext = this.getBaseContext();
 
-        searchButton = findViewById(R.id.search_button);
+        ImageButton searchButton = findViewById(R.id.search_button);
+        ImageButton homeScreen = findViewById(R.id.homeButton);
         searchText = findViewById(R.id.search_text);
-        homeScreen = findViewById(R.id.homeButton);
         backButton = findViewById(R.id.backButton);
 
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        basket = (Basket) bundle.getSerializable("basket");
-        searchedText = (String) bundle.getCharSequence("search_text");
+        Bundle bundle = getIntent().getBundleExtra(BUNDLE_NAME);
+        basket = (Basket) bundle.getSerializable(BASKET_NAME);
+        String searchedText = (String) bundle.getCharSequence("search_text");
         categoryId = bundle.getInt("category_id");
 
-
         initRecyclerView();
-
 
         if (!searchedText.isEmpty())
             searchText.setText(searchedText);
@@ -65,15 +60,14 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
         else
             getProductsByCategory();
 
-
         searchButton.setOnClickListener(v -> getProductsByName());
 
         homeScreen.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), HomeScreen.class);
 
             Bundle bundle1 = new Bundle();
-            bundle1.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle1);
+            bundle1.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle1);
 
             startActivity(intent);
         });
@@ -90,8 +84,8 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
             Intent intent = new Intent(v.getContext(), CategoriesSearchPage.class);
 
             Bundle bundle2 = new Bundle();
-            bundle2.putSerializable("basket", basket);
-            intent.putExtra("bundle", bundle2);
+            bundle2.putSerializable(BASKET_NAME, basket);
+            intent.putExtra(BUNDLE_NAME, bundle2);
 
             startActivity(intent);
         });
@@ -121,11 +115,11 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
             products = gson.getSearchResults(searchText.getText().toString());
             if (products != null) {
                 mAdapter.replaceList(products);
-                runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                runOnUiThread(mAdapter::notifyDataSetChanged);
             } else {
-                runOnUiThread(new Thread(() -> Toast.makeText(getApplicationContext(),
+                runOnUiThread((Toast.makeText(getApplicationContext(),
                         "Δεν υπάρχει προϊόν με αυτή την ονομασία.",
-                        Toast.LENGTH_LONG).show()));
+                        Toast.LENGTH_LONG)::show));
                 runOnUiThread(this::onBackPressed);
             }
         };
@@ -143,11 +137,11 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
             products = gson.getProductsByCategory(categoryId - 1);
             if (products != null) {
                 mAdapter.replaceList(products);
-                runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                runOnUiThread((mAdapter::notifyDataSetChanged));
             } else {
-                runOnUiThread(new Thread(() -> Toast.makeText(getApplicationContext(),
+                runOnUiThread((Toast.makeText(getApplicationContext(),
                         "Δεν λάβαμε τα προϊόντα της κατηγορίας. Ελέγξτε τη σύνδεσή σας.",
-                        Toast.LENGTH_LONG).show()));
+                        Toast.LENGTH_LONG)::show));
                 runOnUiThread(this::onBackPressed);
             }
         };
@@ -170,12 +164,12 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                     if (basket.getProducts().contains(p)) {
                         basket.getQuantities().set(basket.getProducts().indexOf(p), q);
                         mAdapter.replaceBasket(basket);
-                        runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                        runOnUiThread((mAdapter::notifyDataSetChanged));
                     } else {
                         basket.getProducts().add(p);
                         basket.getQuantities().add(q);
                         mAdapter.replaceBasket(basket);
-                        runOnUiThread(new Thread(() -> mAdapter.notifyDataSetChanged()));
+                        runOnUiThread((mAdapter::notifyDataSetChanged));
                     }
                     gsonfw.saveToFile(basket, mContext);
                 }

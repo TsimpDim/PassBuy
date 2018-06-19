@@ -19,11 +19,11 @@ import java.util.List;
 
 public class GsonWorker {
 
-    private static final String pbUrl = "http://snf-812693.vm.okeanos.grnet.gr:8080/api";
-    private static final String placesUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-    private static final String placesKey = "YOUR_KEY";
+    private static final String PB_URL = "http://snf-812693.vm.okeanos.grnet.gr:8080/api";
+    private static final String PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+    private static final String PLACES_KEY = "YOUR_KEY";
 
-    private static final String[] apiCategories = {"beverages", "dairy", "delicatessen", "frozen",
+    private static final String[] API_CATEGORIES = {"beverages", "dairy", "delicatessen", "frozen",
             "fruits_veggies", "snacks", "health_beauty", "home", "meat_fish", "misc"};
 
     private Gson gson = new GsonBuilder().create();
@@ -119,7 +119,7 @@ public class GsonWorker {
 
         // Return empty if stores are null
         if (stores == null)
-           return locations;
+            return locations;
 
         // Iterate over all store chains
         for (Store store : stores) {
@@ -152,8 +152,7 @@ public class GsonWorker {
                     storeLocation.setStoreId(store.getId());
                     locations.add(storeLocation);
                 }
-            }
-            else
+            } else
                 return locations;
         }
         return locations;
@@ -192,7 +191,7 @@ public class GsonWorker {
         List<Product> products = null;
 
         // Get JSON string
-        json = this.getJSON("/products/" + apiCategories[categoryId]);
+        json = this.getJSON("/products/" + API_CATEGORIES[categoryId]);
 
         // Convert JSON to a List<Product> object if nothing ugly happened
         if (json != null)
@@ -230,7 +229,7 @@ public class GsonWorker {
         // Create a StringBuilder for the final URL
         StringBuilder finalURL = new StringBuilder();
         // Append API URL
-        finalURL.append(pbUrl);
+        finalURL.append(PB_URL);
         // Append endpoint
         finalURL.append(endpoint);
 
@@ -290,7 +289,7 @@ public class GsonWorker {
         // Create a StringBuilder for the final URL
         StringBuilder finalURL = new StringBuilder();
         // Append API URL
-        finalURL.append(placesUrl);
+        finalURL.append(PLACES_URL);
         // Append location
         finalURL.append("location=" + userCoordinates.getLat() + "%2C" + userCoordinates.getLng());
         // Append parameters
@@ -298,7 +297,7 @@ public class GsonWorker {
         // Append name parameter
         finalURL.append(storeName);
         // Append API KEY
-        finalURL.append("&key=" + placesKey);
+        finalURL.append("&key=" + PLACES_KEY);
 
         // Create a StringBuilder to store the JSON string
         StringBuilder result = new StringBuilder();
