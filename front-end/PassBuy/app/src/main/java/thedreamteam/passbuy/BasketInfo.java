@@ -15,7 +15,6 @@ public class BasketInfo extends PortraitActivity {
     private List<Product> products;
     private List<Integer> quantities;
     private int storeId;
-    private StoreLocation storeLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class BasketInfo extends PortraitActivity {
 
         Bundle bundle = getIntent().getBundleExtra("bundle");
         Basket basket = (Basket) bundle.getSerializable("basket");
-        storeLoc = (StoreLocation) bundle.getSerializable("storeLoc");
+        StoreLocation storeLoc = (StoreLocation) bundle.getSerializable("storeLoc");
         storeId = bundle.getInt("store_id");
         products = basket.getProducts();
         quantities = basket.getQuantities();

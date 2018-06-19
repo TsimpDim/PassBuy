@@ -24,7 +24,6 @@ public class GsonFileWorker {
             outputStream.close();
         } catch (Exception e) {
             // Can't occur
-            return;
         }
     }
 
