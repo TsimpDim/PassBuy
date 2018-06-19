@@ -1,7 +1,5 @@
 package thedreamteam.passbuy;
 
-import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +12,12 @@ public class BasketInfoAdapter extends RecyclerView.Adapter<BasketInfoAdapter.Vi
 
     private List<Product> products;
     private List<Integer> quantities;
-    private Integer store_id;
-    private Context mContext;
+    private int storeId;
 
-
-    public BasketInfoAdapter(Context mContext, List<Product> products, List<Integer> quantities, Integer store_id) {
+    public BasketInfoAdapter(List<Product> products, List<Integer> quantities, int storeId) {
         this.products = products;
         this.quantities = quantities;
-        this.store_id = store_id;
-        this.mContext = mContext;
+        this.storeId = storeId;
     }
 
     @Override
@@ -33,29 +28,28 @@ public class BasketInfoAdapter extends RecyclerView.Adapter<BasketInfoAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.item_name.setSelected(true);
-        holder.item_q.setText(String.valueOf(quantities.get(position)));
-        holder.item_name.setText(products.get(position).getName());
-        holder.item_price.setText(String.format("%.2f €", products.get(position).getPrices().get(store_id).getPrice() * quantities.get(position)));
+        holder.itemQ.setText(String.valueOf(quantities.get(position)));
+        holder.itemName.setText(products.get(position).getName());
+        holder.itemPrice.setText(String.format("%.2f €", products.get(position).getPrices().get(storeId).getPrice() * quantities.get(position)));
     }
 
+    @Override
+    public int getItemCount() {
+        return products.size();
+    }
 
-        @Override
-        public int getItemCount () {
-            return products.size();
-        }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView itemPrice;
+        TextView itemName;
+        TextView itemQ;
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView item_price;
-            TextView item_name;
-            TextView item_q;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                item_price = itemView.findViewById(R.id.item_price);
-                item_name = itemView.findViewById(R.id.item_name);
-                item_q = itemView.findViewById(R.id.item_q);
-            }
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemPrice = itemView.findViewById(R.id.item_price);
+            itemName = itemView.findViewById(R.id.item_name);
+            itemName.setSelected(true);
+            itemQ = itemView.findViewById(R.id.item_q);
         }
     }
+}
 
