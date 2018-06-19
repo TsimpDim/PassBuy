@@ -140,8 +140,11 @@ public class GsonWorker {
 
                     // Get vicinity
                     String vicinityResponse = result.getAsJsonPrimitive("vicinity").getAsString();
+
                     // Remove city from the response
-                    String vicinity = vicinityResponse.substring(0, vicinityResponse.indexOf(','));
+                    String vicinity = vicinityResponse;
+                    if (vicinity.contains(","))
+                        vicinity = vicinity.substring(0, vicinity.indexOf(","));
 
                     // We need to move in geometry -> location to get the coordinates
                     JsonElement location = result.get("geometry").getAsJsonObject().get("location");

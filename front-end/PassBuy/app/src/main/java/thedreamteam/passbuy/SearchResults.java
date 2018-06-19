@@ -117,9 +117,9 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                 mAdapter.replaceList(products);
                 runOnUiThread(mAdapter::notifyDataSetChanged);
             } else {
-                runOnUiThread((Toast.makeText(getApplicationContext(),
+                runOnUiThread(() -> Toast.makeText(mContext,
                         "Δεν υπάρχει προϊόν με αυτή την ονομασία.",
-                        Toast.LENGTH_LONG)::show));
+                        Toast.LENGTH_LONG).show());
                 runOnUiThread(this::onBackPressed);
             }
         };
@@ -139,9 +139,9 @@ public class SearchResults extends PortraitActivity implements PopupQuantityDial
                 mAdapter.replaceList(products);
                 runOnUiThread((mAdapter::notifyDataSetChanged));
             } else {
-                runOnUiThread((Toast.makeText(getApplicationContext(),
+                runOnUiThread(() -> Toast.makeText(mContext,
                         "Δεν λάβαμε τα προϊόντα της κατηγορίας. Ελέγξτε τη σύνδεσή σας.",
-                        Toast.LENGTH_LONG)::show));
+                        Toast.LENGTH_LONG).show());
                 runOnUiThread(this::onBackPressed);
             }
         };
