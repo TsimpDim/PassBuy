@@ -6,7 +6,7 @@ Built by a team of students for a school project, PassBuy enables the user to fi
 
 # Running the application
 
-To run it locally you need to have a key for the Google Places A
+To run it locally you need to have a key for the Google Places API.
 
 ## Back-end
 
