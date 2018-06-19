@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +19,9 @@ import java.util.List;
 
 public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.DialogListener {
 
-    public static final int supermarketNumber = 4;
+    public static final int SUPERMARKET_NUMBER = 4;
+    private static final String BUNDLE_NAME = "bundle";
+    private static final String BASKET_NAME = "basket";
 
     private Basket basket = new Basket();
     private GsonWorker gson = new GsonWorker();
@@ -32,12 +32,8 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
     private double bestPrice;
     private Context mContext;
 
-    private ImageButton deleteButton;
-    private ImageButton moreInfoButton;
-    private ImageButton searchButton;
     private TextView bestSum;
     private TextView bestSupermarket;
-    private TextView emptyBasketText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +41,23 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         setContentView(R.layout.home_screen);
         mContext = this.getBaseContext();
 
-        deleteButton = findViewById(R.id.delete_button);
-        moreInfoButton = findViewById(R.id.more_info_button);
+        ImageButton deleteButton = findViewById(R.id.delete_button);
+        ImageButton moreInfoButton = findViewById(R.id.more_info_button);
+        ImageButton searchButton = findViewById(R.id.searchButton);
+        TextView emptyBasketText = findViewById(R.id.empty_basket_text);
         bestSum = findViewById(R.id.sum_price_text);
         bestSupermarket = findViewById(R.id.supermarket_text);
-        searchButton = findViewById(R.id.searchButton);
-        emptyBasketText = findViewById(R.id.empty_basket_text);
-
 
         bestSum.setSelected(true);
         bestSupermarket.setSelected(true);
 
-        //Will work when popup is ready
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
+        Bundle bundle = intent.getBundleExtra(BUNDLE_NAME);
         if (bundle != null) {
-            basket = (Basket) bundle.getSerializable("basket");
+            basket = (Basket) bundle.getSerializable(BASKET_NAME);
             gsonfw.saveToFile(basket, mContext);
-        }
-        else
+        } else
             basket = gsonfw.loadFromFile(mContext);
-
 
         initRecyclerView();
         mAdapter.replaceList(basket);
@@ -83,31 +75,28 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
             bestSupermarket.setText("");
         }
 
-
         //Open next activity (CategoriesSearchPage) when is clicked.
         searchButton.setOnClickListener(view -> {
             Intent intent1 = new Intent(view.getContext(), CategoriesSearchPage.class);
 
             Bundle bundle1 = new Bundle();
-            bundle1.putSerializable("basket", basket);
-            intent1.putExtra("bundle", bundle1);
+            bundle1.putSerializable(BASKET_NAME, basket);
+            intent1.putExtra(BUNDLE_NAME, bundle1);
 
             startActivity(intent1);
         });
 
-
         moreInfoButton.setOnClickListener(v -> {
-            if(!basket.getProducts().isEmpty()) {
-                Intent intent12 =  new Intent(v.getContext() , MoreInfo.class);
+            if (!basket.getProducts().isEmpty()) {
+                Intent intent12 = new Intent(v.getContext(), MoreInfo.class);
                 Bundle bundle12 = new Bundle();
-                bundle12.putSerializable("basket", basket);
+                bundle12.putSerializable(BASKET_NAME, basket);
                 bundle12.putSerializable("stores", (Serializable) stores);
-                bundle12.putCharSequence("best_super",bestStore);
-                bundle12.putDouble("best_price",bestPrice);
-                intent12.putExtra("bundle", bundle12);
+                bundle12.putCharSequence("best_super", bestStore);
+                bundle12.putDouble("best_price", bestPrice);
+                intent12.putExtra(BUNDLE_NAME, bundle12);
                 startActivity(intent12);
-            }
-            else
+            } else
                 Toast.makeText(v.getContext(), "Το καλάθι σου είναι άδειο. Πρόσθεσε προϊόντα.", Toast.LENGTH_SHORT).show();
         });
 
@@ -134,13 +123,10 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         });
     }
 
-
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         this.finishAffinity();
     }
-
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_home_screen);
@@ -155,33 +141,29 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
 
         //initialize total_prices
         List<StorePrice> totalPrices = new ArrayList<>();
-        for (int i = 0; i < supermarketNumber; i++) {
+        for (int i = 0; i < SUPERMARKET_NUMBER; i++) {
             StorePrice dummy = new StorePrice();
             dummy.setPrice(0.00);
             dummy.setStoreId(i + 1);
             totalPrices.add(dummy);
         }
 
-
         //Get the sum for every store
-        for (int y = 0; y < supermarketNumber; y++) {
+        for (int y = 0; y < SUPERMARKET_NUMBER; y++) {
 
             totalPrices.get(y).setStoreId(y + 1);
 
             for (int i = 0; i < basket.getProducts().size(); i++) {
-                double temp_price = totalPrices.get(y).getPrice() + (basket.getProducts().get(i).getPrices().get(y).getPrice()) * (basket.getQuantities().get(i));
+                double tempPrice = totalPrices.get(y).getPrice() + (basket.getProducts().get(i).getPrices().get(y).getPrice()) * (basket.getQuantities().get(i));
 
-                totalPrices.get(y).setPrice(temp_price);
+                totalPrices.get(y).setPrice(tempPrice);
             }
         }
-
 
         basket.setTotalPrices(totalPrices);
 
         //Sort Total Prices
-        //THIS SHOULD CHANGE WITH JAVA 8 WAY
         Collections.sort(totalPrices, new PricesComparator());
-
 
         //Get Store names
         new Thread(() -> {
@@ -199,14 +181,11 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
             }
         }).start();
 
-
         //Best price (double)
         bestPrice = totalPrices.get(0).getPrice();
 
         //Replace this with a String , its double
         bestSum.setText(String.format(" %.2f", totalPrices.get(0).getPrice()) + "€");
-
-
     }
 
     @Override
@@ -225,10 +204,7 @@ public class HomeScreen extends PortraitActivity implements PopupQuantityDialog.
         }
         gsonfw.saveToFile(basket, mContext);
     }
-
-
 }
-
 
 //Comparator that compares prices
 class PricesComparator implements Comparator {

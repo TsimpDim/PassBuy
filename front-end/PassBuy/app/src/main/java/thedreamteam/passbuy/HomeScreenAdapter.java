@@ -23,7 +23,6 @@ public class HomeScreenAdapter extends RecyclerView.Adapter<HomeScreenAdapter.Vi
     private List<Integer> quantities;
     private Context mContext;
 
-
     public HomeScreenAdapter(Context mContext, List<Product> products, List<Integer> quantities, Basket basket) {
         this.mContext = mContext;
         this.products = products;
@@ -34,32 +33,24 @@ public class HomeScreenAdapter extends RecyclerView.Adapter<HomeScreenAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_basket_adapter, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-
-        holder.item_name.setText(products.get(position).getName());
-        holder.item_q.setText(quantities.get(position).toString());
-
+        final ViewHolder holder = new ViewHolder(view);
         holder.edit.setOnClickListener(v -> {
             PopupQuantityDialog dialogFragment = new PopupQuantityDialog();
 
             android.app.FragmentManager fm = ((Activity) mContext).getFragmentManager();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable("product", products.get(position));
+            bundle.putSerializable("product", products.get(holder.getAdapterPosition()));
             bundle.putSerializable("basket", basket);
             dialogFragment.setArguments(bundle);
             dialogFragment.show(fm, "Sample Fragment");
         });
 
-        holder.delete.setOnClickListener(view -> {
+        holder.delete.setOnClickListener(v -> {
             DialogInterface.OnClickListener dialogClickListener = (dialog, decision) -> {
                 if (decision == DialogInterface.BUTTON_POSITIVE) {
-                    basket.getQuantities().remove(position);
-                    basket.getProducts().remove(position);
+                    basket.getQuantities().remove(holder.getAdapterPosition());
+                    basket.getProducts().remove(holder.getAdapterPosition());
 
                     Intent intent = new Intent(mContext, HomeScreen.class);
 
@@ -74,6 +65,14 @@ public class HomeScreenAdapter extends RecyclerView.Adapter<HomeScreenAdapter.Vi
             builder.setMessage("Θέλεις να διαγραφεί το προϊόν;").setPositiveButton("ΔΙΑΓΡΑΦΗ", dialogClickListener)
                     .setNegativeButton("ΑΚΥΡΟ", dialogClickListener).show();
         });
+
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.itemName.setText(products.get(position).getName());
+        holder.itemQ.setText(quantities.get(position).toString());
     }
 
     @Override
@@ -88,22 +87,21 @@ public class HomeScreenAdapter extends RecyclerView.Adapter<HomeScreenAdapter.Vi
         quantities.addAll(basket.getQuantities());
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView item_name;
-        TextView item_q;
+        TextView itemName;
+        TextView itemQ;
         ImageButton edit;
         ImageButton delete;
-        ConstraintLayout parent_layout;
+        ConstraintLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            item_name = itemView.findViewById(R.id.item_name);
-            item_name.setSelected(true);
-            item_q = itemView.findViewById(R.id.quantity_text);
+            itemName = itemView.findViewById(R.id.item_name);
+            itemName.setSelected(true);
+            itemQ= itemView.findViewById(R.id.quantity_text);
             edit = itemView.findViewById(R.id.edit_button);
             delete = itemView.findViewById(R.id.delete_button_recycler);
-            parent_layout = itemView.findViewById(R.id.parent_layout);
+            parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
 }
