@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorToolbar">
+
+    <ImageButton
+        android:id="@+id/homeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:focusable="true"
+        android:clickable="true"
+        app:srcCompat="@drawable/logo"/>
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:adjustViewBounds="true"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/back" />
+
+</android.support.v7.widget.Toolbar>
