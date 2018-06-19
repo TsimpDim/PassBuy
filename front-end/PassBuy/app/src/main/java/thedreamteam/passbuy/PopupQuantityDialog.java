@@ -23,8 +23,6 @@ public class PopupQuantityDialog extends DialogFragment {
     private int quantity = 0;
     private DialogListener dialogListener;
 
-    private TextView count;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Create view
         View view = inflater.inflate(R.layout.popup_quantity, container, false);
@@ -33,13 +31,10 @@ public class PopupQuantityDialog extends DialogFragment {
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         this.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-
-
         Basket basket = (Basket) getArguments().getSerializable("basket");
         Product product = (Product) getArguments().getSerializable("product");
 
-
-        count = view.findViewById(R.id.count);
+        TextView count = view.findViewById(R.id.count);
         count.setText(String.valueOf(quantity));
 
         TextView itemName = view.findViewById(R.id.item_name);
